@@ -1,3 +1,8 @@
 body {
     color: black;
 }
+input, textarea{
+    display: block;
+    margin: 2rem;
+    padding: 1rem;
+}
