@@ -1,8 +1,11 @@
 body {
     color: black;
 }
-input, textarea{
+input, textarea {
     display: block;
     margin: 2rem;
     padding: 1rem;
+}
+.errormsg {
+    color: red;
 }
