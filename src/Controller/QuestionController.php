@@ -33,10 +33,12 @@ class QuestionController extends AbstractController
             }
             //return null;
         }
-        return $this->twig->render('Question/add.html.twig',
-        [
-            'errors' => $errors, 
-        ]);
+        return $this->twig->render(
+            'Question/add.html.twig',
+            [
+            'errors' => $errors,
+            ]
+        );
     }
 
     private function validate(array $question)
