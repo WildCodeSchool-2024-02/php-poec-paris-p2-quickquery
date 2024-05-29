@@ -1,0 +1,24 @@
+{# TODO : manage errors display #}
+
+<form method="post">
+    <input type="hidden" value="{{ question.id }}" name="id">
+
+    <label for="title">Titre de la question</label>
+    <input type="text" value="{{ question.title }}" name="title" id="title">
+
+    <label for="description">Description</label>
+    <textarea name="description" id="description" rows="4" cols="50">{{ question.description }}</textarea>
+
+    <label for="scheduled_at">Heure du meeting</label>
+    <input type="text" value="2024-05-27 15:45:00" placeholder="2024-05-27 15:45:00" name="scheduled_at" id="scheduled_at">
+
+    <label for="tags">Tags (choix multiples)</label>
+    <select name="tags[]" id="tags" multiple>
+        <option value="1">php</option>
+        <option value="2">css</option>
+        <option value="3">html</option>
+        <option value="4">javascript</option>
+    </select>
+
+    <button type="submit">GO!!</button>
+</form>

@@ -1,0 +1,14 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <h1>Poser une question</h1>
+
+    {% if errors is not empty %}
+        {% for error in errors %}
+            <p class="errormsg">{{ error }}</p>
+        {% endfor %}
+    {% endif %}
+
+    {% include 'Question/_form.html.twig' %}
+    
+{% endblock %}
