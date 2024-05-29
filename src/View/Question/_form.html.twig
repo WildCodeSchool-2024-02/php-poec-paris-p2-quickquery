@@ -13,12 +13,20 @@
     <input type="text" value="2024-05-27 15:45:00" placeholder="2024-05-27 15:45:00" name="scheduled_at" id="scheduled_at">
 
     <label for="tags">Tags (choix multiples)</label>
-    <select name="tags[]" id="tags" multiple>
-        <option value="1">php</option>
-        <option value="2">css</option>
-        <option value="3">html</option>
-        <option value="4">javascript</option>
+
+{#     <select name="tags[]" multiple>
+        {% for tag in tags %}
+            <option value="{{ tag.id }}" {% if tag.id in tags %} selected {% endif %}></option>>{{ tag.name }}</option>
+        {% endfor %}
+    </select> #}
+
+
+    <select name="tags[]" multiple>
+        {% for tag in tags %}
+            <option value="{{ tag.id }}" {% if tag.id in selected_tags %}selected{% endif %}>{{ tag.name }}</option>
+        {% endfor %}
     </select>
+
 
     <button type="submit">GO!!</button>
 </form>

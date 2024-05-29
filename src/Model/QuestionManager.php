@@ -50,4 +50,14 @@ class QuestionManager extends AbstractManager
         $statement->bindValue(':tag_id', $tagId, PDO::PARAM_INT);
         $statement->execute();
     }
+
+    public function allTags(): array
+    {
+        $statement = $this->pdo->prepare("SELECT * FROM tag");
+        $statement->execute();
+        $tags = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $tags;
+    }
+
+
 }
