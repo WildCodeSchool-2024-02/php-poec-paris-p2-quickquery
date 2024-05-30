@@ -14,19 +14,18 @@
 
     <label for="tags">Tags (choix multiples)</label>
 
-{#     <select name="tags[]" multiple>
-        {% for tag in tags %}
-            <option value="{{ tag.id }}" {% if tag.id in tags %} selected {% endif %}></option>>{{ tag.name }}</option>
-        {% endfor %}
-    </select> #}
+    <button type="button" id="toggleTagsButton">Afficher les tags</button>
 
+    <div id="tagsDropdown" style="display: none;">
+        <select name="tags[]" id="tagsSelect" multiple>
+            {% for tag in tags %}
+                <option value="{{ tag.id }}" {% if tag.id in selectedTags %}selected{% endif %}>{{ tag.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
 
-    <select name="tags[]" multiple>
-        {% for tag in tags %}
-            <option value="{{ tag.id }}" {% if tag.id in selectedTags %}selected{% endif %}>{{ tag.name }}</option>
-        {% endfor %}
-    </select>
+    <div id="selectedTagsDisplay"></div>
 
-
+    <br /><br />
     <button type="submit">GO!!</button>
 </form>
