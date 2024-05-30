@@ -1,6 +1,33 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-    <h1>QuickQuery.com</h1>
-    <p><a href="/question/add">Poser une question</a></p>
+<div>
+    <h2>Last Questions</h2>
+    <ul>
+     <div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for query in lastQueries %}
+
+    <div class="card" style="width: 18rem;">
+      <hr>
+        <div class="card-body">
+          <h4 class="card-title">{{ query.title}}</h4>
+          <p class="card-text">{{query.description }}</p>
+        </div>
+      
+      <ul class="list-group list-group-flush">
+        {% for tag in tags %}
+        <li class="list-group-item">{{tag.name }}</li>
+        {% endfor %}
+      </ul>
+
+        <div class="card-body">
+          <a href="#" class="card-link">Card link</a>
+          <a href="#" class="card-link">Another link</a>
+        </div>
+      <hr>
+    </div>
+    {% endfor %}
+    </div>
+  </ul>
+</div>
 {% endblock %}
