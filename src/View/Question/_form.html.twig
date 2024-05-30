@@ -1,29 +1,35 @@
 {# TODO : manage errors display #}
-
-<form method="post">
-    <input type="hidden" value="{{ question.id }}" name="id">
-
-    <label for="title">Titre de la question</label>
-    <input type="text" value="{{ question.title }}" name="title" id="title">
-
-    <label for="description">Description</label>
-    <textarea name="description" id="description" rows="4" cols="50">{{ question.description }}</textarea>
-
-    <label for="scheduled_at">Heure du meeting</label>
-    <input type="text" value="2024-05-27 15:45:00" placeholder="2024-05-27 15:45:00" name="scheduled_at" id="scheduled_at">
-
-    <button type="button" id="toggleTagsButton">Choisir des tags</button>
-
-    <div id="tagsDropdown" style="display: none;">
-        <select name="tags[]" id="tagsSelect" multiple>
-            {% for tag in tags %}
-                <option value="{{ tag.id }}" {% if tag.id in selectedTags %}selected{% endif %}>{{ tag.name }}</option>
-            {% endfor %}
-        </select>
+<form method="post" id="form-question" class="card">
+    <div class="row card-body">
+        <div class="col-md-6">
+            <input type="hidden" value="{{ question.id }}" name="id">
+            <div class="form-group">
+                <input type="text" placeholder="Titre de votre question" value="{{ question.title }}" name="title" id="title" class="form-control">
+            </div>
+            <div class="form-group">
+                <textarea name="description" placeholder="Description de votre question" id="description" rows="4" cols="50" class="form-control">{{ question.description }}</textarea>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="scheduled_at">Heure du meeting</label>
+                <textarea value="2024-05-27 15:45:00" name="scheduled_at" id="scheduled_at" rows="3" class="form-control">2024-05-27 15:45:00</textarea>
+            </div>
+            <div class="form-group">
+                <button type="button" id="toggleTagsButton" class="btn btn-secondary">Choisir des tags</button>
+                <div id="tagsDropdown" style="display: none; margin-top: 10px;">
+                    <select name="tags[]" id="tagsSelect" multiple class="form-control">
+                        {% for tag in tags %}
+                            <option value="{{ tag.id }}" {% if tag.id in selectedTags %}selected{% endif %}>{{ tag.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div id="selectedTagsDisplay" class="form-group"></div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-outline-dark btn-lg">Poser la question !</button>
+            </div>
+        </div>
     </div>
 
-    <div id="selectedTagsDisplay"></div>
-
-    <br /><br />
-    <button type="submit">GO!!</button>
 </form>
