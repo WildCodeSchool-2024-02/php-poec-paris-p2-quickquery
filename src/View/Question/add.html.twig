@@ -18,12 +18,11 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-
         var toggleButton = document.getElementById('toggleTagsButton');
         var dropdown = document.getElementById('tagsDropdown');
         var tagsSelect = document.getElementById('tagsSelect');
         var selectedTagsDisplay = document.getElementById('selectedTagsDisplay');
-        
+
         if (toggleButton) {
             toggleButton.addEventListener('click', function() {
                 if (dropdown.style.display === 'none') {
@@ -31,21 +30,38 @@
                     this.textContent = 'Ajouter !';
                 } else {
                     dropdown.style.display = 'none';
-                    this.textContent = 'Choisir des tags';
+                    this.textContent = 'Selectionner des tags';
                 }
             });
         }
-        if (tagsSelect) {
-            tagsSelect.addEventListener('change', function() {
-                var selectedOptions = Array.from(tagsSelect.selectedOptions);
-                var selectedTags = selectedOptions.map(option => option.textContent);
-                selectedTagsDisplay.textContent = selectedTags.join(', ');
+
+        function updateSelectedTagsDisplay() {
+            var selectedOptions = Array.from(tagsSelect.selectedOptions);
+            selectedTagsDisplay.innerHTML = ''; // Clear current display
+
+            selectedOptions.forEach(option => {
+                var tagItem = document.createElement('span');
+                tagItem.className = 'tag-item';
+                tagItem.textContent = option.textContent;
+
+                var removeButton = document.createElement('span');
+                removeButton.className = 'remove-tag';
+                removeButton.textContent = ' x';
+                removeButton.addEventListener('click', function() {
+                    option.selected = false;
+                    updateSelectedTagsDisplay();
+                });
+
+                tagItem.appendChild(removeButton);
+                selectedTagsDisplay.appendChild(tagItem);
             });
+        }
+
+        if (tagsSelect) {
+            tagsSelect.addEventListener('change', updateSelectedTagsDisplay);
 
             // Initialiser l'affichage avec les tags déjà sélectionnés
-            var initialSelectedOptions = Array.from(tagsSelect.selectedOptions);
-            var initialSelectedTags = initialSelectedOptions.map(option => option.textContent);
-            selectedTagsDisplay.textContent = initialSelectedTags.join(', ');
+            updateSelectedTagsDisplay();
         }
     });
 </script>
