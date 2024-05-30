@@ -12,9 +12,19 @@ class QuestionController extends AbstractController
     public function add(): ?string
     {
         $errors = [];
+        $question = [];
+        // $selected_tags = [];
+        $questionManager = new QuestionManager();
+        $tags = $questionManager->allTags();
+        $selectedTags = [];
+
+
+        //var_dump($tags);
 
         if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             $question = $_POST;
+
+            $selectedTags = isset($_POST['tags']) ? $_POST['tags'] : [];
 
             foreach ($question as $key => $value) {
                 $question[$key] = is_string($value) ? trim($value) : $value;
@@ -23,8 +33,6 @@ class QuestionController extends AbstractController
             $errors = $this->validate($question);
 
             if (empty($errors)) {
-                $questionManager = new QuestionManager();
-
                 $id = $questionManager->insert($question);
 
                 if (!empty($id)) {
@@ -36,7 +44,10 @@ class QuestionController extends AbstractController
         return $this->twig->render(
             'Question/add.html.twig',
             [
-            'errors' => $errors,
+                'errors' => $errors,
+                'tags' => $tags,
+                'selectedTags' => $selectedTags,
+                'question' => $question,
             ]
         );
     }
