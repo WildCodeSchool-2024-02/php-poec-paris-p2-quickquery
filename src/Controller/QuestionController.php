@@ -16,28 +16,23 @@ class QuestionController extends AbstractController
         // $selected_tags = [];
         $questionManager = new QuestionManager();
         $tags = $questionManager->allTags();
-        $selected_tags = [];
+        $selectedTags = [];
 
-        
+
         //var_dump($tags);
 
         if ($_SERVER["REQUEST_METHOD"] === 'POST') {
-
             $question = $_POST;
 
-            $selected_tags = isset($_POST['tags']) ? $_POST['tags'] : [];
+            $selectedTags = isset($_POST['tags']) ? $_POST['tags'] : [];
 
             foreach ($question as $key => $value) {
-
                 $question[$key] = is_string($value) ? trim($value) : $value;
-
             }
 
             $errors = $this->validate($question);
 
             if (empty($errors)) {
-                
-
                 $id = $questionManager->insert($question);
 
                 if (!empty($id)) {
@@ -51,7 +46,7 @@ class QuestionController extends AbstractController
             [
                 'errors' => $errors,
                 'tags' => $tags,
-                'selected_tags' => $selected_tags,
+                'selectedTags' => $selectedTags,
                 'question' => $question,
             ]
         );

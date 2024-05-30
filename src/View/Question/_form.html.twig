@@ -23,7 +23,7 @@
 
     <select name="tags[]" multiple>
         {% for tag in tags %}
-            <option value="{{ tag.id }}" {% if tag.id in selected_tags %}selected{% endif %}>{{ tag.name }}</option>
+            <option value="{{ tag.id }}" {% if tag.id in selectedTags %}selected{% endif %}>{{ tag.name }}</option>
         {% endfor %}
     </select>
 
