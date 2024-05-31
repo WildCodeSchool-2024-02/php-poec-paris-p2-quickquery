@@ -58,4 +58,5 @@ class QuestionManager extends AbstractManager
         $tags = $statement->fetchAll(\PDO::FETCH_ASSOC);
         return $tags;
     }
+
 }

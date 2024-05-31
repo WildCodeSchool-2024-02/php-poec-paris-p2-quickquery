@@ -16,5 +16,6 @@ class HomeController extends AbstractController
         $lastQueries = $homeManager->select5Last();
         // var_dump($lastQueries);
         return $this->twig->render('Home/index.html.twig', ['lastQueries' => $lastQueries]);
+
     }
 }
