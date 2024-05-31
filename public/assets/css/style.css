@@ -12,9 +12,7 @@ body {
 .form-control {
     background-color: #f3f3f3;
 }
-.errormsg {
-    color: red;
-}
+
 .tag-item {
     display: inline-block;
     padding: 2px 5px;
@@ -30,4 +28,5 @@ body {
     font-size: 1.5rem;
     padding: 2rem 0;
 }
+
 

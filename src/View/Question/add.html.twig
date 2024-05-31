@@ -7,7 +7,10 @@
 
         {% if errors is not empty %}
             {% for error in errors %}
-                <p class="errormsg">{{ error }}</p>
+            <div class="alert alert-danger d-flex align-items-center" role="alert">
+                <i class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" role="img" aria-label="Danger:"></i>
+                <div>{{ error }}</div>
+            </div>
             {% endfor %}
         {% endif %}
 
