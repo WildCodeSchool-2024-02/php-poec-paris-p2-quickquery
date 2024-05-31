@@ -21,9 +21,9 @@ class HomeManager extends AbstractManager
     /**
      * Get all row from database.
      */
-    //     'SELECT * FROM question_tag  
-    // JOIN question ON question.id=question_tag.question_id 
-    // JOIN tag ON tag.id=question_tag.tag_id 
+    //'SELECT * FROM question_tag
+    // JOIN question ON question.id=question_tag.question_id
+    // JOIN tag ON tag.id=question_tag.tag_id
     // ORDER BY created_at DESC LIMIT 5 ;'
     public function select5Last(): array
     {
