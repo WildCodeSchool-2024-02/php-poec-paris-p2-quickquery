@@ -7,14 +7,23 @@
                 <input type="text" placeholder="Titre de votre question" value="{{ question.title }}" name="title" id="title" class="form-control">
             </div>
             <div class="form-group">
-                <textarea name="description" placeholder="Description de votre question" id="description" rows="4" cols="50" class="form-control">{{ question.description }}</textarea>
+                <textarea name="description" placeholder="Description de votre question" id="description" rows="8" cols="50" class="form-control">{{ question.description }}</textarea>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 d-flex flex-column">
+
+
             <div class="form-group">
                 <label for="scheduled_at">Heure du meeting</label>
-                <textarea value="2024-05-27 15:45:00" name="scheduled_at" id="scheduled_at" rows="3" class="form-control">2024-05-27 15:45:00</textarea>
+                <select id="scheduled_at" name="scheduled_at" class="form-control">
+                    {% for time in availableTimes %}
+                        <option value="{{ time }}" {% if time == question.scheduled_at or time == current_time %}selected{% endif %}>
+                            {{ time|date('H:i') }}
+                        </option>
+                    {% endfor %}
+                </select>
             </div>
+
             <div class="form-group">
                 <button type="button" id="toggleTagsButton" class="btn btn-secondary">Choisir des tags</button>
                 <div id="tagsDropdown" style="display: none; margin-top: 10px;">
