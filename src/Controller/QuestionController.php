@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use DateTime;
+use DateTimeZone;
+use DateInterval;
 use App\Model\QuestionManager;
 
 class QuestionController extends AbstractController
@@ -17,9 +20,8 @@ class QuestionController extends AbstractController
         $questionManager = new QuestionManager();
         $tags = $questionManager->allTags();
         $selectedTags = [];
+        $availableTimes = $this->getAvailableTimes();
 
-
-        //var_dump($tags);
 
         if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             $question = $_POST;
@@ -41,6 +43,8 @@ class QuestionController extends AbstractController
             }
             //return null;
         }
+
+
         return $this->twig->render(
             'Question/add.html.twig',
             [
@@ -48,9 +52,40 @@ class QuestionController extends AbstractController
                 'tags' => $tags,
                 'selectedTags' => $selectedTags,
                 'question' => $question,
+                'availableTimes' => $availableTimes,
+
             ]
         );
     }
+
+    public function getAvailableTimes(): array
+    {
+        $times = [];
+        $timezone = new DateTimeZone('Europe/Paris');
+        $startTime = new DateTime('now', $timezone);
+        $startTime->add(new DateInterval('PT30M'));
+
+
+        $minutes = intval($startTime->format('i'));
+        if ($minutes >= 30) {
+            $startTime->modify('+1 hour');
+            $startTime->setTime(intval($startTime->format('H')), 0);
+        } else {
+            $startTime->setTime(intval($startTime->format('H')), 30);
+        }
+
+        $endTime = new DateTime('19:30', $timezone);
+
+        $interval = new DateInterval('PT30M');
+
+        while ($startTime <= $endTime) {
+            $times[] = $startTime->format('Y-m-d H:i:s');
+            $startTime->add($interval);
+        }
+
+        return $times;
+    }
+
 
     private function validate(array $question)
     {
@@ -69,8 +104,12 @@ class QuestionController extends AbstractController
 
         if (empty($question['scheduled_at'])) {
             $errors[] = 'La date et heure sont obligatoires';
-        } elseif (!preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $question['scheduled_at'])) {
-            $errors[] = 'Le format date et heure est invaide : ex. YYYY-MM-DD HH:MM:SS';
+        } else {
+            $selectedTime = \DateTime::createFromFormat('Y-m-d H:i:s', $question['scheduled_at']);
+
+            if (!$selectedTime) {
+                $errors[] = 'Le format de la date et heure est invalide';
+            }
         }
 
         if (empty($question['tags'])) {

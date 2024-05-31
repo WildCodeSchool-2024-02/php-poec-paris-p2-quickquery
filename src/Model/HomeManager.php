@@ -27,9 +27,7 @@ class HomeManager extends AbstractManager
     // ORDER BY created_at DESC LIMIT 5 ;'
     public function select5Last(): array
     {
-        $stmt = $this->pdo->query(
-            'SELECT * FROM question ORDER BY created_at DESC LIMIT 5;'
-        );
+        $stmt = $this->pdo->query('SELECT * FROM question ORDER BY created_at DESC LIMIT 5;');
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
