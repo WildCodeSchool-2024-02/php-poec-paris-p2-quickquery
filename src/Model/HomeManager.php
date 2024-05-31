@@ -23,7 +23,10 @@ class HomeManager extends AbstractManager
      */
     public function select5Last(): array
     {
-        $stmt = $this->pdo->query('SELECT * FROM question ORDER BY created_at DESC LIMIT 5');
+        $stmt = $this->pdo->query('SELECT * FROM question_tag  
+        JOIN question ON question.id=question_tag.question_id 
+        JOIN tag ON tag.id=question_tag.tag_id 
+        ORDER BY created_at DESC LIMIT 5 ;');
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 

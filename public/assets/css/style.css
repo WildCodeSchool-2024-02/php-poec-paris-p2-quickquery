@@ -197,11 +197,11 @@
     --bs-form-invalid-border-color: #e89895;
 }
 
-*,
+/* *,
 *::before,
 *::after {
     box-sizing: border-box;
-}
+} */
 
 @media (prefers-reduced-motion: no-preference) {
     :root {
@@ -801,11 +801,11 @@ progress {
 .container-sm {
     --bs-gutter-x: 1.5rem;
     --bs-gutter-y: 0;
-    width: 100%;
+    /* width: 100%; */
     padding-right: calc(var(--bs-gutter-x) * 0.5);
     padding-left: calc(var(--bs-gutter-x) * 0.5);
     margin-right: auto;
-    margin-left: auto;
+    margin-left: 8rem;
 }
 
 @media (min-width: 576px) {
@@ -4591,9 +4591,9 @@ fieldset:disabled .btn {
 }
 
 .card {
-    --bs-card-spacer-y: 1rem;
-    --bs-card-spacer-x: 1rem;
-    --bs-card-title-spacer-y: 0.5rem;
+    --bs-card-spacer-y: 3rem;
+    --bs-card-spacer-x: 2rem;
+    --bs-card-title-spacer-y: 1.5rem;
     --bs-card-title-color: ;
     --bs-card-subtitle-color: ;
     --bs-card-border-width: var(--bs-border-width);
@@ -4623,6 +4623,7 @@ fieldset:disabled .btn {
     background-clip: border-box;
     border: var(--bs-card-border-width) solid var(--bs-card-border-color);
     border-radius: var(--bs-card-border-radius);
+    margin: 1rem;
 }
 .card > hr {
     margin-right: 0;
@@ -12868,4 +12869,12 @@ table,
 #logo {
     width: 10%;
     height: 10%;
+}
+
+/* .container {
+    margin: 0 auto;
+} */
+
+h2 {
+    padding: 3rem;
 }
