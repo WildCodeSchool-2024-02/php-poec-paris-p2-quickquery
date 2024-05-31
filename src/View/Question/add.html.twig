@@ -24,6 +24,8 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var toggleButton = document.getElementById('toggleTagsButton');
+        var helpBtTags = document.getElementById('helpBtTags');
+        var layerHelpMsg = document.getElementById('layerHelpMsg'); 
         var dropdown = document.getElementById('tagsDropdown');
         var tagsSelect = document.getElementById('tagsSelect');
         var selectedTagsDisplay = document.getElementById('selectedTagsDisplay');
@@ -37,6 +39,16 @@
                     dropdown.style.display = 'none';
                     this.textContent = 'Selectionner des tags';
                 }
+            });
+        }
+
+        if(helpBtTags){
+            helpBtTags.addEventListener('mouseover', function() {
+                layerHelpMsg.classList.remove('d-none');
+            });
+
+            helpBtTags.addEventListener('mouseout', function() {
+                layerHelpMsg.classList.add('d-none');
             });
         }
 

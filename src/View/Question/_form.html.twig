@@ -25,7 +25,12 @@
 
             <div class="form-group">
                 <button type="button" id="toggleTagsButton" class="btn btn-secondary">Choisir des tags </button>
-                <span class="icon-circle" id="helpBt"><i class="bi bi-info flex-shrink-0 me-2" role="img" aria-label="Info"></i></span>
+                <span class="icon-circle" id="helpBtTags">
+                    <i class="bi bi-info flex-shrink-0 me-2" role="img" aria-label="Info"></i>
+                </span>
+                <div class="alert alert-light d-none" role="alert" id="layerHelpMsg">
+                    CTRL + Click pour multi-selectionner les tags !
+                </div>
                 
                 <div id="tagsDropdown" style="display: none; margin-top: 10px;">
                     <select name="tags[]" id="tagsSelect" multiple class="form-control">
