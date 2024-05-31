@@ -24,7 +24,9 @@
             </div>
 
             <div class="form-group">
-                <button type="button" id="toggleTagsButton" class="btn btn-secondary">Choisir des tags</button>
+                <button type="button" id="toggleTagsButton" class="btn btn-secondary">Choisir des tags </button>
+                <span class="icon-circle" id="helpBt"><i class="bi bi-info flex-shrink-0 me-2" role="img" aria-label="Info"></i></span>
+                
                 <div id="tagsDropdown" style="display: none; margin-top: 10px;">
                     <select name="tags[]" id="tagsSelect" multiple class="form-control">
                         {% for tag in tags %}

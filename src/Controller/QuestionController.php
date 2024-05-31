@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use DateTime;
+use DateTimeZone;
 use DateInterval;
 use App\Model\QuestionManager;
 
@@ -60,8 +61,8 @@ class QuestionController extends AbstractController
     public function getAvailableTimes(): array
     {
         $times = [];
-        $timezone = new \DateTimeZone('Europe/Paris');
-        $startTime = new DateTime('now',$timezone);
+        $timezone = new DateTimeZone('Europe/Paris');
+        $startTime = new DateTime('now', $timezone);
         $startTime->add(new DateInterval('PT30M'));
 
 
@@ -73,7 +74,7 @@ class QuestionController extends AbstractController
             $startTime->setTime(intval($startTime->format('H')), 30);
         }
 
-        $endTime = new DateTime('19:30',$timezone);
+        $endTime = new DateTime('19:30', $timezone);
 
         $interval = new DateInterval('PT30M');
 
