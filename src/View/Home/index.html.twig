@@ -16,6 +16,11 @@
         </div>
       
       {# <ul class="list-group list-group-flush"> #}
+<form id="participation-form" class="card" method="POST" action='/participate/add'>
+    <input type="hidden" name="user_id" value="1">
+    <input type="hidden" name="question_id" value={{ query.id }}>
+    <button type="submit" class="btn btn-dark">Participate</button>
+</form>
        
 <div class="card-footer bg-transparent">
         <span class="badge bg-dark">{{query.name }}</span>
@@ -24,14 +29,11 @@
        </div>
       {# </ul> #}
 
-        {# <div class="card-body">
-          <a href="#" class="card-link">Card link</a>
-          <a href="#" class="card-link">Another link</a>
-        </div> #}
-      {# <hr> #}
-    </div>
-    {% endfor %}
+    <hr>
+</div>
+{% endfor %}
     </div>
   </ul>
 </div>
+
 {% endblock %}
