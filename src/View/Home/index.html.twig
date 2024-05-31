@@ -3,4 +3,14 @@
 {% block content %}
     <h1>QuickQuery.com</h1>
     <p><a href="/question/add">Poser une question</a></p>
+
+    <div id="questions">
+        {% for question in questions %}
+            <div class="question">
+                <h2>{{ question.title }}</h2>
+                <p>{{ question.description }}</p>
+                <p>Scheduled at: {{ question.scheduled_at }}</p>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}
