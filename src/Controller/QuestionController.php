@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use DateTime;
+use DateInterval;
 use App\Model\QuestionManager;
 
 class QuestionController extends AbstractController
@@ -41,7 +43,7 @@ class QuestionController extends AbstractController
             //return null;
         }
 
-        
+
         return $this->twig->render(
             'Question/add.html.twig',
             [
@@ -55,36 +57,34 @@ class QuestionController extends AbstractController
         );
     }
 
-    private function getAvailableTimes(): array
+    public function getAvailableTimes(): array
     {
         $times = [];
-        $timezone = new \DateTimeZone('Europe/Paris');
-        $startTime = new \DateTime('09:00', $timezone);
-        $endTime = new \DateTime('18:00', $timezone);
-        $interval = new \DateInterval('PT30M');
-        $now = new \DateTime('now', $timezone);
-        
-        if ($now > $startTime) {
-            $startTime = $now;
-        }
-        
+
+        $startTime = new DateTime('12:00');
+        $startTime->add(new DateInterval('PT30M'));
+
+
         $minutes = intval($startTime->format('i'));
-        if ($minutes >= 30 || $minutes <= 30) {
+        if ($minutes >= 30) {
             $startTime->modify('+1 hour');
-            $startTime->setTime($startTime->format('H'), 30);
-        } 
+            $startTime->setTime(intval($startTime->format('H')), 0);
+        } else {
+            $startTime->setTime(intval($startTime->format('H')), 30);
+        }
 
+        $endTime = new DateTime('19:30');
 
-    
+        $interval = new DateInterval('PT30M');
+
         while ($startTime <= $endTime) {
-            $startTime->setTimezone($timezone);
             $times[] = $startTime->format('Y-m-d H:i:s');
             $startTime->add($interval);
         }
-    
 
         return $times;
     }
+
 
     private function validate(array $question)
     {
@@ -105,7 +105,6 @@ class QuestionController extends AbstractController
             $errors[] = 'La date et heure sont obligatoires';
         } else {
             $selectedTime = \DateTime::createFromFormat('Y-m-d H:i:s', $question['scheduled_at']);
-            $currentTime = new \DateTime();
 
             if (!$selectedTime) {
                 $errors[] = 'Le format de la date et heure est invalide';
@@ -120,6 +119,4 @@ class QuestionController extends AbstractController
 
         return $errors;
     }
-
-    
 }
