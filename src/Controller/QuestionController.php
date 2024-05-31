@@ -82,17 +82,4 @@ class QuestionController extends AbstractController
         return $errors;
     }
 
-    /**
-     * Show all questions
-     */
-    public function index(): ?string
-    {
-        $questionManager = new QuestionManager();
-        $questions = $questionManager->getAllQuestions();
-
-        return $this->twig->render(
-            'Home/index.html.twig',
-            ['questions' => $questions]
-        );
-    }
 }

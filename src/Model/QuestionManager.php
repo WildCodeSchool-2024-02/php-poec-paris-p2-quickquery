@@ -59,13 +59,4 @@ class QuestionManager extends AbstractManager
         return $tags;
     }
 
-    /**
-     * Fetch all questions
-     */
-
-    public function getAllQuestions(): array
-    {
-        $statement = $this->pdo->query('SELECT * FROM ' . self::TABLE);
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
-    }
 }

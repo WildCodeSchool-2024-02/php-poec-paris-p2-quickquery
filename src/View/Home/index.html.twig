@@ -1,16 +1,38 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-    <h1>QuickQuery.com</h1>
-    <p><a href="/question/add">Poser une question</a></p>
-
-    <div id="questions">
-        {% for question in questions %}
-            <div class="question">
-                <h2>{{ question.title }}</h2>
-                <p>{{ question.description }}</p>
-                <p>Scheduled at: {{ question.scheduled_at }}</p>
-            </div>
-        {% endfor %}
+<div>
+    <h2>Last Questions</h2>
+    <ul>
+     <div class="row row-cols-1 row-cols-md-3 g-4">
+   {% for query in lastQueries %}
+<div class="card" style="width: 18rem;">
+    <hr>
+    <div class="card-body">
+        <h4 class="card-title">{{ query.title }}</h4>
+        <p class="card-text">{{ query.description }}</p>
     </div>
+
+    <ul class="list-group list-group-flush">
+        {% for tag in tags %}
+        <li class="list-group-item">{{ tag.name }}</li>
+        {% endfor %}
+    </ul>
+
+    <div class="card-body">
+        <a href="#" class="card-link">Card link</a>
+        <a href="#" class="card-link">Another link</a>
+<form id="participation-form" class="card" method="POST" action='/participate/add'>
+    <input type="hidden" name="user_id" value="1">
+    <input type="hidden" name="question_id" value={{ query.id }}>
+    <button type="submit">Participate</button>
+</form>
+    </div>
+    <hr>
+</div>
+{% endfor %}
+    </div>
+  </ul>
+</div>
+
 {% endblock %}
