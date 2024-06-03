@@ -54,8 +54,7 @@
 
         function updateSelectedTagsDisplay() {
             var selectedOptions = Array.from(tagsSelect.selectedOptions);
-            selectedTagsDisplay.innerHTML = ''; // Clear current display
-
+            selectedTagsDisplay.innerHTML = '';
             selectedOptions.forEach(option => {
                 var tagItem = document.createElement('span');
                 tagItem.className = 'tag-item';
@@ -63,8 +62,6 @@
 
                 var removeButton = document.createElement('span');
                 removeButton.className = 'remove-tag';
-                //removeButton.textContent = ' x';
-                //removeButton.textContent = '<i class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" role="img" aria-label="Danger:"></i>';
                 removeButton.innerHTML = '<i class="bi bi-x flex-shrink-0 me-2" role="img" aria-label="Remove"></i>';
 
                 removeButton.addEventListener('click', function() {
@@ -79,8 +76,6 @@
 
         if (tagsSelect) {
             tagsSelect.addEventListener('change', updateSelectedTagsDisplay);
-
-            // Initialiser l'affichage avec les tags déjà sélectionnés
             updateSelectedTagsDisplay();
         }
     });
