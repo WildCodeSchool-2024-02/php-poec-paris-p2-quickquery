@@ -23,7 +23,6 @@ SET time_zone = "+00:00";
 
 -- --------------------------------------------------------
 
---
 -- Structure de la table `alert`
 --
 
@@ -223,9 +222,7 @@ INSERT INTO `user` (`id`, `pseudo`, `email`, `password`) VALUES
 (2, 'Samy', 'samy@gmail.com', '$2y$10$e/2wTz5aPbW6DA9z1.zPueDzy8qX4T/9szq1y47QRO.Ds2LGwktHa');
 
 --
--- Contraintes pour les tables déchargées
---
-
+-- Déchargement des données de la table `user`
 --
 -- Contraintes pour la table `alert`
 --
@@ -252,6 +249,7 @@ ALTER TABLE `question`
 ALTER TABLE `question_tag`
   ADD CONSTRAINT `question_tag_ibfk_1` FOREIGN KEY (`question_id`) REFERENCES `question` (`id`),
   ADD CONSTRAINT `question_tag_ibfk_2` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`id`);
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
