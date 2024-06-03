@@ -9,7 +9,6 @@ use App\Model\QuestionManager;
 
 class QuestionController extends AbstractController
 {
-
     public function add(): ?string
     {
         $errors = [];
@@ -61,18 +60,17 @@ class QuestionController extends AbstractController
         $startTime = new DateTime('09:30', $timezone);
         $endTime = new DateTime('19:30', $timezone);
         $interval = new DateInterval('PT30M');
-    
+
         $cutoffTime = new DateTime('19:30', $timezone);
 
         if ($currentDateTime > $cutoffTime) {
-            
             $startTime->add(new DateInterval('P1D'));
             $endTime->add(new DateInterval('P1D'));
-        }    
+        }
         while ($startTime <= $endTime) {
             $times[] = $startTime->format('Y-m-d H:i:s');
             $startTime->add($interval);
-        }    
+        }
         return $times;
     }
 
