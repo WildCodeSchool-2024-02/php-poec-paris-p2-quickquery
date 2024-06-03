@@ -17,7 +17,7 @@
                 <select id="scheduled_at" name="scheduled_at" class="form-control">
                     {% for time in availableTimes %}
                         <option value="{{ time }}" {% if time == question.scheduled_at or time == current_time %}selected{% endif %}>
-                            {{ time|date('H:i') }}
+                            {{ time }}
                         </option>
                     {% endfor %}
                 </select>

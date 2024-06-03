@@ -48,13 +48,13 @@ body {
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background-color: #007bff;
+    background-color: #899bad;
     color: white;
     font-size: 1rem;
     cursor: pointer;
     position: relative;
 }
-.alert {
+#layerHelpMsg {
     position: absolute;
     top: 4rem;
     left: 17rem;

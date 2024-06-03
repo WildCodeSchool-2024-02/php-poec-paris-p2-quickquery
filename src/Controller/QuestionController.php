@@ -58,7 +58,27 @@ class QuestionController extends AbstractController
         );
     }
 
+    /**
+     * Code corrigé : n'ffiche que les horaires de la plage horaire 9h30-19h30
+     * @return array
+     */
     public function getAvailableTimes(): array
+    {
+        $times = [];
+        $timezone = new DateTimeZone('Europe/Paris');
+        $startTime = new DateTime('09:30', $timezone);
+        $endTime = new DateTime('19:30', $timezone);
+        $interval = new DateInterval('PT30M');
+
+        while ($startTime <= $endTime) {
+            $times[] = $startTime->format('Y-m-d H:i:s');
+            $startTime->add($interval);
+        }
+
+        return $times;
+    }
+
+    /* public function getAvailableTimes(): array
     {
         $times = [];
         $timezone = new DateTimeZone('Europe/Paris');
@@ -84,7 +104,7 @@ class QuestionController extends AbstractController
         }
 
         return $times;
-    }
+    } */
 
 
     private function validate(array $question)
