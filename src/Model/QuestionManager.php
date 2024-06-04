@@ -28,7 +28,7 @@ class QuestionManager extends AbstractManager
 
         if (isset($question['tags']) && is_array($question['tags'])) {
             foreach ($question['tags'] as $tagId) {
-                $tagManager->insertTag($questionId, $tagId);
+                $tagManager->insert($questionId, $tagId);
             }
         }
         return $questionId;

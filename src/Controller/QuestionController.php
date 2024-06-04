@@ -20,22 +20,22 @@ class QuestionController extends AbstractController
         $tags = $tagManager->selectAll();
         $availableTimes = $this->getAvailableTimes();
 
-
         if ($_SERVER["REQUEST_METHOD"] === 'POST') {
-            $question = $_POST;
+
+            $question = array_map('trim', $_POST);
 
             foreach ($question as $key => $value) {
-                if (is_string($value)) {
-                    $question[$key] = trim(htmlentities($value, ENT_QUOTES, 'UTF-8'));
-                } else {
-                    $question[$key] = $value;
-                }
+               
+                $question[$key] = htmlentities($value, ENT_QUOTES, 'UTF-8');
+
             }
-            $selectedTags = isset($question['tags']) ? $question['tags'] : [];
 
             $errors = $this->validate($question);
+           
+            $selectedTags = $question['tags'];
 
             if (empty($errors)) {
+
                 $id = $questionManager->insert($question);
 
                 if (!empty($id)) {

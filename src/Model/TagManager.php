@@ -8,7 +8,7 @@ class TagManager extends AbstractManager
 {
     public const TABLE = 'tag';
 
-    public function insertTag(int $questionId, int $tagId): void
+    public function insert(int $questionId, int $tagId): void
     {
         $statement = $this->pdo->prepare(
             "INSERT INTO question_tag 
