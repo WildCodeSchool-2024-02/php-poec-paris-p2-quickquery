@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Model;
+
 use App\Model\TagManager;
 use PDO;
 
@@ -11,7 +12,7 @@ class QuestionManager extends AbstractManager
     public function insert(array $question): int
     {
         $tagManager = new TagManager();
-        
+
         $statement = $this->pdo->prepare(
             "INSERT INTO " . self::TABLE . " 
             (`title`, `description`, `scheduled_at`, `created_at`, `author`) 
@@ -27,12 +28,9 @@ class QuestionManager extends AbstractManager
 
         if (isset($question['tags']) && is_array($question['tags'])) {
             foreach ($question['tags'] as $tagId) {
-
                 $tagManager->insertTag($questionId, $tagId);
             }
         }
         return $questionId;
     }
-
-
 }

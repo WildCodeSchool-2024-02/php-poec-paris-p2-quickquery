@@ -23,7 +23,7 @@ class QuestionController extends AbstractController
 
         if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             $question = $_POST;
-        
+
             foreach ($question as $key => $value) {
                 if (is_string($value)) {
                     $question[$key] = trim(htmlentities($value, ENT_QUOTES, 'UTF-8'));
@@ -32,15 +32,15 @@ class QuestionController extends AbstractController
                 }
             }
             $selectedTags = isset($question['tags']) ? $question['tags'] : [];
-        
+
             $errors = $this->validate($question);
-        
+
             if (empty($errors)) {
                 $id = $questionManager->insert($question);
-        
+
                 if (!empty($id)) {
                     header('Location:/');
-                    exit(); 
+                    exit();
                 }
             }
         }

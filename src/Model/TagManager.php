@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Model;
 
@@ -7,7 +7,7 @@ use PDO;
 class TagManager extends AbstractManager
 {
     public const TABLE = 'tag';
-    
+
     public function insertTag(int $questionId, int $tagId): void
     {
         $statement = $this->pdo->prepare(
@@ -19,5 +19,4 @@ class TagManager extends AbstractManager
         $statement->bindValue(':tag_id', $tagId, PDO::PARAM_INT);
         $statement->execute();
     }
-
 }
