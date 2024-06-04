@@ -15,7 +15,6 @@ class ParticipantController
 
     public function participate()
     {
-            $_SERVER['REQUEST_METHOD'] === 'POST';
             $userId = (int)$_POST['user_id'];
             $questionId = (int)$_POST['question_id'];
 
