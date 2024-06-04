@@ -13,13 +13,9 @@ class QuestionController extends AbstractController
     {
         $errors = [];
         $question = [];
-        // $selected_tags = [];
         $questionManager = new QuestionManager();
         $tags = $questionManager->allTags();
         $selectedTags = [];
-
-
-        //var_dump($tags);
 
         if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             $question = $_POST;
@@ -81,5 +77,4 @@ class QuestionController extends AbstractController
 
         return $errors;
     }
-
 }

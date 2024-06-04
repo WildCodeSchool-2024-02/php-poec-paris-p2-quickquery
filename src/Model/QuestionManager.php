@@ -29,7 +29,6 @@ class QuestionManager extends AbstractManager
 
         $questionId = (int)$this->pdo->lastInsertId();
 
-        // Insérer les associations entre la question et les tags dans la table question_tag
         if (isset($question['tags']) && is_array($question['tags'])) {
             foreach ($question['tags'] as $tagId) {
                 $this->insertQuestionTag($questionId, $tagId);
@@ -58,5 +57,4 @@ class QuestionManager extends AbstractManager
         $tags = $statement->fetchAll(\PDO::FETCH_ASSOC);
         return $tags;
     }
-
 }

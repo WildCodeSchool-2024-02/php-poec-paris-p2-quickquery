@@ -72,35 +72,14 @@ CREATE TABLE IF NOT EXISTS `question` (
 --
 
 INSERT INTO `question` (`id`, `title`, `description`, `scheduled_at`, `created_at`, `author`) VALUES
-(4, 'dsfsdf', 'sdfsdfsdf', '2024-05-27 15:45:00', '2024-05-28 14:04:59', 1),
-(5, 'dsfsdf', 'sdfsdfsdf', '2024-05-27 15:45:00', '2024-05-28 14:04:59', 1),
-(6, 'Comment coder en JS via une app API GoogleMaps ?', 'Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsum', '2024-05-27 15:45:00', '2024-05-28 14:06:08', 1),
-(7, 'Comment coder en JS via une app API GoogleMaps ?', 'Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsum', '2024-05-27 15:45:00', '2024-05-28 14:06:08', 1),
-(8, 'Comment utilisez twig pour faire une sauce grabiche ?', 'Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsum', '2024-05-27 15:45:00', '2024-05-28 14:07:45', 1),
-(9, 'Comment coder en nocode ?', 'Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsum', '2024-05-27 15:45:00', '2024-05-28 14:12:29', 1),
-(10, 'J\'insere des tags dans la database et je sais pas comment faire ?', 'Lorem ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet', '2024-05-27 15:45:00', '2024-05-28 14:26:37', 1),
-(11, 'J\'insere des tags dans la database et je sais pas comment faire ?', 'Lorem ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet', '2024-05-27 15:45:00', '2024-05-28 14:37:08', 1),
-(12, 'J\'insere des tags dans la database et je sais pas comment faire ?', 'Lorem ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet', '2024-05-27 15:45:00', '2024-05-28 14:39:56', 1),
-(13, 'J\'insere des tags dans la database et je sais pas comment faire ?', 'Lorem ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet', '2024-05-27 15:45:00', '2024-05-28 14:40:05', 1),
-(14, 'J\'insere des tags dans la database et je sais pas comment faire ?', 'Lorem ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet', '2024-05-27 15:45:00', '2024-05-28 14:41:56', 1),
-(15, 'J\'insere des tags dans la database et je sais pas comment faire ?', 'Lorem ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet', '2024-05-27 15:45:00', '2024-05-28 14:42:04', 1),
-(16, 'aaaaa aaaaaaaaaa aa aaaa', 'aaaaa aaaaaaaaaa aa aaaaaaaaa aaaaaaaaaa aa aaaaaaaaa aaaaaaaaaa aa aaaaaaaaa aaaaaaaaaa aa aaaaaaaaa aaaaaaaaaa aa aaaaaaaaa aaaaaaaaaa aa aaaa', '2024-05-27 15:45:00', '2024-05-28 14:42:49', 1),
-(17, 'Est ce que c\'est bien de faire du php ?', 'Lorem ipusmLorem ipusmLorem ipusmLorem ipusmLorem ipusmLorem ipusmLorem ipusmv', '2024-05-27 15:45:00', '2024-05-29 10:23:33', 1),
-(18, 'Un test de question depuis le change TEXT du champ description et du charset utf8mb4...', 'lorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsum', '2024-05-27 15:45:00', '2024-05-29 12:26:46', 1),
-(19, 'fdsdfs sdf sdf sdf sdf', 'fdsfsdfsfsd fsd fsdfsf', '2024-05-27 15:45:00', '2024-05-29 17:14:56', 1),
-(20, 'hfghfg', 'hfghfgdf dfg dfg dfg', '2024-05-27 15:45:00', '2024-05-29 18:25:51', 1),
-(21, 'aaaaaa  aa aaa', 'aaaaaaaaaaaaaaaa   a a a aa aaa', '2024-05-27 15:45:00', '2024-05-29 18:57:09', 1),
-(22, 'J\'inzcire une super bquesiotn', 'lorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsum', '2024-05-27 15:45:00', '2024-05-30 14:10:00', 1),
-(23, 'qsdqsd', 'qsdqsdqsd', '2024-05-27 15:45:00', '2024-05-30 15:48:32', 1),
-(24, 'Une question vraiment super sur le CSS !', 'Lorem ipsum dolor sitt amtLorem ipsum dolor sitt amtLorem ipsum dolor sitt amtLorem ipsum dolor sitt amtLorem ipsum dolor sitt amt', '2024-05-27 15:45:00', '2024-05-30 16:18:37', 1),
-(25, 'Comment faire une pate à crepe en CSS ?', 'lorem ipsum dolor it amt ,ipsum dolor it amt ipsum dolor it amt ipsum dolor it amt ipsum dolor it amt ipsum dolor it amt ipsum dolor it amt ipsum dolor it amt ipsum dolor it amt ipsum dolor it amt ipsum dolor it amt', '2024-05-27 15:45:00', '2024-05-31 10:07:36', 1),
-(26, 'Ceci n\'est pas une question', 'Lorem ipsum bla blaLorem ipsum bla blaLorem ipsum bla blaLorem ipsum bla blaLorem ipsum bla blaLorem ipsum bla bla', '2024-05-31 18:00:00', '2024-05-31 11:23:06', 1),
-(27, 'fdgdfgdfgdf gd', 'd fgdf gdfg df gdfg', '2024-05-31 14:30:00', '2024-05-31 11:24:14', 1),
-(28, 'Ceci n\'est pas une autre quesiton', 'fqdfsdf sdf sdf dsf sdf sd', '0000-00-00 00:00:00', '2024-05-31 11:57:58', 1),
-(29, 'qsdqs', 'dqs qsd qsd qsd', '0000-00-00 00:00:00', '2024-05-31 11:59:33', 1),
-(30, 'dfsdf sd', 'f sdf sd fsd fsdf', '0000-00-00 00:00:00', '2024-05-31 12:00:30', 1),
-(31, 'aaaaaaaaaaaaaaaaa', 'bbbbbbbbbbbbbbbbbbbbbbb', '2024-05-31 14:00:00', '2024-05-31 12:06:09', 1);
+(37, 'Addition assignments not able to understand', 'Im trying to learn about the loops and the addition assignments such as ++, +=, *=... etc The problem is I don\'t get the logic of it completely if (x+=y = x + y).\r\n\r\nWhy in the sum= 0 the result is 6 and sum = number is 11? I dont get where this 6 comes from. Do you know a nice resource to help me on this? Thank you!', '2024-06-04 13:30:00', '2024-06-04 10:35:33', 1),
+(38, 'Comment centrer une div ?', 'Ca decal toujours vers la gauche je comprends pas', '2024-06-04 18:00:00', '2024-06-04 10:37:14', 1),
+(39, 'Comment appeler une API avec JS', 'Je suis debutant en JS et PHP et l\'erreur me met : \r\n#Error\r\n#define YYJSON_TYPE_NONE\r\n((uint8_t)0)', '2024-06-04 13:30:00', '2024-06-04 10:38:36', 1),
+(40, 'Comment générer des input SQL ?', 'Je dois générer des contenus pour mon site web, y\'a qlqun pour m\'aider svp ?  je suis debutant pitié :)', '2024-06-04 16:00:00', '2024-06-04 10:40:11', 1),
+(41, 'Mon app react native : soucis navigation', 'The action \'NAVIGATE\' with payload {\"name\":\"Home\"} was not handled by any navigator.\r\nPourtant mon fichier est clean !', '2024-06-04 16:30:00', '2024-06-04 10:42:07', 1),
+(42, 'Les startups de logiciels qui ont besoin de $ peuvent-elles éviter le capital-risque ?', 'L\'épisode d\'aujourd\'hui est une conversation avec Benjamin Shestakofsky, professeur adjoint de sociologie à l\'Université de Pennsylvanie, qui se concentre sur la manière dont les technologies numériques affectent le travail et l\'emploi, les organisations et les échanges économiques.', '2024-06-04 19:00:00', '2024-06-04 10:42:49', 1);
 
+--
 -- --------------------------------------------------------
 
 --

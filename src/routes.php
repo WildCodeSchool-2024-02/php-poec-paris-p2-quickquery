@@ -3,5 +3,5 @@
 return [
     '' => ['HomeController', 'index',],
     'question/add' => ['QuestionController', 'add',],
-    'participate/add' => ['ParticipantController', 'participate'],
+    'participate/add' => ['ParticipantController', 'participate']
 ];

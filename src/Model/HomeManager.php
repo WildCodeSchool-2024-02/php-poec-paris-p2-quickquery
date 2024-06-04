@@ -32,7 +32,7 @@ class HomeManager extends AbstractManager
      */
     public function selectOneById(int $id): array|false
     {
-        // prepared request
+
         $statement = $this->pdo->prepare("SELECT * FROM " . static::TABLE . " WHERE id=:id");
         $statement->bindValue('id', $id, \PDO::PARAM_INT);
         $statement->execute();
@@ -45,7 +45,7 @@ class HomeManager extends AbstractManager
      */
     public function delete(int $id): void
     {
-        // prepared request
+
         $statement = $this->pdo->prepare("DELETE FROM " . static::TABLE . " WHERE id=:id");
         $statement->bindValue('id', $id, \PDO::PARAM_INT);
         $statement->execute();
