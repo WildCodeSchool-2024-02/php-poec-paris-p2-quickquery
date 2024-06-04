@@ -6,9 +6,6 @@ use App\Model\HomeManager;
 
 class HomeController extends AbstractController
 {
-    /**
-     * Display home page
-     */
     public function index(): string
     {
 
