@@ -3,8 +3,6 @@
 namespace App\Model;
 
 use PDO;
-use DateTime;
-use DateInterval;
 
 class QuestionManager extends AbstractManager
 {
