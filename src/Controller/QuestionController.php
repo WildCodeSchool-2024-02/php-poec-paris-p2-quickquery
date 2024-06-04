@@ -21,21 +21,17 @@ class QuestionController extends AbstractController
         $availableTimes = $this->getAvailableTimes();
 
         if ($_SERVER["REQUEST_METHOD"] === 'POST') {
-
             $question = array_map('trim', $_POST);
 
             foreach ($question as $key => $value) {
-               
                 $question[$key] = htmlentities($value, ENT_QUOTES, 'UTF-8');
-
             }
 
             $errors = $this->validate($question);
-           
+
             $selectedTags = $question['tags'];
 
             if (empty($errors)) {
-
                 $id = $questionManager->insert($question);
 
                 if (!empty($id)) {
