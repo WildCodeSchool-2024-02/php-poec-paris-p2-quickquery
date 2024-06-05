@@ -5,7 +5,6 @@ namespace App\Controller;
 use DateTime;
 use DateTimeZone;
 use DateInterval;
-
 use App\Model\QuestionManager;
 use App\Model\TagManager;
 use App\Model\AlertManager;
@@ -117,9 +116,7 @@ class QuestionController extends AbstractController
         $msg = "";
 
         if ($_SERVER["REQUEST_METHOD"] === 'POST') {
-
             if (isset($_POST['questionId'])) {
-
                 $questionId = $_POST['questionId'];
                 $userId = 1;
 
