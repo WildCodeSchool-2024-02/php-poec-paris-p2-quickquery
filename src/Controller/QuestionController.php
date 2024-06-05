@@ -5,12 +5,14 @@ namespace App\Controller;
 use DateTime;
 use DateTimeZone;
 use DateInterval;
+
 use App\Model\QuestionManager;
 use App\Model\TagManager;
+use App\Model\AlertManager;
 
 class QuestionController extends AbstractController
 {
-    public function add(): ?string
+    public function addQuestion(): ?string
     {
         $errors = [];
         $question = [];
@@ -107,5 +109,29 @@ class QuestionController extends AbstractController
         }
 
         return $errors;
+    }
+
+    public function addAlert(): string
+    {
+        $alertManager = new AlertManager();
+        $msg = "";
+
+        if ($_SERVER["REQUEST_METHOD"] === 'POST') {
+
+            if (isset($_POST['questionId'])) {
+
+                $questionId = $_POST['questionId'];
+                $userId = 1;
+
+                $isInserted = $alertManager->insert($userId, $questionId);
+
+                if ($isInserted === true) {
+                    $msg = "Alerte activée !";
+                }
+            }
+        }
+        return $this->twig->render('Home/index.html.twig', [
+            'msg' => $msg,
+        ]);
     }
 }
