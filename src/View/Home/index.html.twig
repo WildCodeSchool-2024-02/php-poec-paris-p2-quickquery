@@ -1,6 +1,29 @@
 {% extends 'layout.html.twig' %}
-
 {% block content %}
-    <h1>QuickQuery.com</h1>
-    <p><a href="/question/add">Poser une question</a></p>
+<div class="container">
+    <h2>Last Questions</h2>
+
+
+    {% if msg is not empty %}
+        <div class="alert alert-{{ msg_type }} d-flex align-items-center" role="alert">
+            {% if msg_type == 'danger' %}
+                <i class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2 mr-3" role="img" aria-label="Danger:"></i>
+            {% elseif msg_type == 'success' %}
+                <i class="bi bi-check-circle-fill flex-shrink-0 me-2 mr-3" role="img" aria-label="Success:"></i>
+            {% endif %}
+            <div>{{ msg }}</div>
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <form id="alert-form" class="card" method="POST" action='/alert/add'>
+            <input type="hidden" name="questionId" value="41">
+            <button type="submit" class="btn btn-dark">Alert</button>
+        </form>
+        <form id="participation-form" class="card" method="POST" action='/participate/add'>
+            <input type="hidden" name="questionId" value="41">
+            <button type="submit" class="btn btn-dark">Participate</button>
+        </form>
+    </div>
+</div>
 {% endblock %}

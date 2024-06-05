@@ -6,6 +6,7 @@ use DateTime;
 use DateTimeZone;
 use DateInterval;
 use App\Model\QuestionManager;
+use App\Model\TagManager;
 
 class QuestionController extends AbstractController
 {
@@ -13,32 +14,32 @@ class QuestionController extends AbstractController
     {
         $errors = [];
         $question = [];
-        $questionManager = new QuestionManager();
-        $tags = $questionManager->allTags();
         $selectedTags = [];
+        $tagManager = new TagManager();
+        $questionManager = new questionManager();
+        $tags = $tagManager->selectAll();
         $availableTimes = $this->getAvailableTimes();
 
-
         if ($_SERVER["REQUEST_METHOD"] === 'POST') {
-            $question = $_POST;
-
-            $selectedTags = isset($_POST['tags']) ? $_POST['tags'] : [];
+            $question = array_map('trim', $_POST);
 
             foreach ($question as $key => $value) {
-                $question[$key] = is_string($value) ? trim($value) : $value;
+                $question[$key] = htmlentities($value, ENT_QUOTES, 'UTF-8');
             }
 
             $errors = $this->validate($question);
+
+            $selectedTags = $question['tags'];
 
             if (empty($errors)) {
                 $id = $questionManager->insert($question);
 
                 if (!empty($id)) {
                     header('Location:/');
+                    exit();
                 }
             }
         }
-
         return $this->twig->render(
             'Question/add.html.twig',
             [

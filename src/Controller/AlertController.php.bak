@@ -1,0 +1,57 @@
+<?php
+
+namespace App\Controller;
+
+use App\Model\AlertManager;
+
+class AlertController extends AbstractController
+{
+    public function add(): void
+    {
+
+        $msg = "Attention : vous avez déjà activé l'alerte pour cette question !";
+        $msgType = "danger";
+        $alertManager = new alertManager();
+
+        if ($_SERVER["REQUEST_METHOD"] === 'POST') {
+            
+            if (isset($_POST['questionId'])) {
+                $questionId = $_POST['questionId'];
+                $userId = 2;
+            }
+
+            if (isset($_COOKIE['userId']) && isset($_COOKIE['questionId'])) {
+                
+                //$msg = "Attention : vous avez déjà activé l'alerte pour cette question !";
+                //$msgType = "danger";
+                //header('Location: /?alert=' . urlencode($msg) . '&alertType=' . urlencode($msgType));
+                $alert = 'nok';
+                header('Location: /?alert=' . urlencode($alert));
+
+                
+
+                exit();
+            } 
+            else 
+            {
+
+                $id = $alertManager->insert($userId, $questionId);
+
+                if (!empty($id)) {
+                    $cookieExpirationTime = time() + (365 * 24 * 60 * 60);
+
+                    setcookie('userId', (string)$userId, $cookieExpirationTime, "/");
+                    setcookie('questionId', (string)$questionId, $cookieExpirationTime, "/");
+
+                   /*  $msg = "Alerte activée !";
+                    $msgType = "success"; */
+
+                    //header('Location: /?msg=' . urlencode($msg) . '&msgType=' . urlencode($msgType));
+                    $alert = 'ok';
+                    header('Location: /?alert=' . urlencode($alert));
+                    exit();
+                }
+            }
+        }
+    }
+}
