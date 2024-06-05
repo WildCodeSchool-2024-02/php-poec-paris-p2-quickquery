@@ -6,13 +6,13 @@ use App\Model\AlertManager;
 
 class AlertController extends AbstractController
 {
-
     public function add(): string
     {
         $alertManager = new AlertManager();
+        $msg = "";
+        $msgType = "";
 
         if ($_SERVER["REQUEST_METHOD"] === 'POST') {
-            
             if (isset($_POST['questionId'])) {
                 $questionId = $_POST['questionId'];
                 $userId = 2;
@@ -31,8 +31,7 @@ class AlertController extends AbstractController
                     $msg = "Attention : vous avez déjà activé l'alerte pour cette question !";
                     $msgType = "danger";
                 }
-
-            } 
+            }
         }
 
         return $this->twig->render('Home/index.html.twig', [
