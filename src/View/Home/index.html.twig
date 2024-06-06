@@ -1,39 +1,39 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-<div class="container">
-    <h2 >Last Questions</h2>
-    <ul>
-     <div class="row ">
-    {% for query in lastQueries %}
+	<div class="container">
+		<h2>Last Questions</h2>
+		<ul>
+			<div class="row ">
+				{% for query in lastQueries %}
 
-    <div class="card" 
-    style="width: 17rem">
-      {# <hr> #}
-        <div class="card-body">
-          <h4 class="card-title">{{ query.title}}</h4>
-          <p class="card-text">{{query.description }}</p>
-        </div>
-      
-      {# <ul class="list-group list-group-flush"> #}
-<form id="participation-form" class="card" method="POST" action='/participate/add'>
-    <input type="hidden" name="user_id" value="1">
-    <input type="hidden" name="question_id" value={{ query.id }}>
-    <button type="submit" class="btn btn-dark">Participate</button>
-</form>
-       
-<div class="card-footer bg-transparent">
-        <span class="badge bg-dark">{{query.name }}</span>
-         {# {% for tag in tags %}
-        {% endfor %} #}
-       </div>
-      {# </ul> #}
+					<div
+						class="card" style="width: 17rem">
+						{# <hr> #}
+						<div class="card-body">
+							<h4 class="card-title">{{ query.title}}</h4>
+							<p class="card-text">{{query.description }}</p>
+						</div>
 
-    <hr>
-</div>
-{% endfor %}
-    </div>
-  </ul>
-</div>
+						{# <ul class="list-group list-group-flush"> #}
+						<form id="participation-form" class="card" method="POST" action='/participate/add'>
+							<input type="hidden" name="user_id" value="1">
+							<input type="hidden" name="question_id" value={{ query.id }}>
+							<button type="submit" class="btn btn-dark">Participate</button>
+						</form>
+
+						<div class="card-footer bg-transparent">
+							<span class="badge bg-dark">{{query.name }}</span>
+							{# {% for tag in tags %}
+																					        {% endfor %} #}
+						</div>
+						{# </ul> #}
+
+						<hr>
+					</div>
+				{% endfor %}
+			</div>
+		</ul>
+	</div>
 
 {% endblock %}

@@ -1,10 +1,10 @@
 {
-    "name": "wcsp2/quickquery",
-    "description": "Ask questions, invite people to participate",
+    "name": "wildcodeschool/simple-mvc",
+    "description": "Simple from scratch PHP MVC for WildCodeSchool students",
     "authors": [
         {
-            "name": "Pierre",
-            "email": "yo@pierrealainfaure.com"
+            "name": "Aurelien",
+            "email": "aurelien.barbier@wildcodeschool.com"
         }
     ],
     "minimum-stability": "stable",

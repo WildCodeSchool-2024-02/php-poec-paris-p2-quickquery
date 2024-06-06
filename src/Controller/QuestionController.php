@@ -6,45 +6,40 @@ use DateTime;
 use DateTimeZone;
 use DateInterval;
 use App\Model\QuestionManager;
+use App\Model\TagManager;
 
 class QuestionController extends AbstractController
 {
-    /**
-     * Add a new question
-     */
     public function add(): ?string
     {
         $errors = [];
         $question = [];
-        // $selected_tags = [];
-        $questionManager = new QuestionManager();
-        $tags = $questionManager->allTags();
         $selectedTags = [];
+        $tagManager = new TagManager();
+        $questionManager = new questionManager();
+        $tags = $tagManager->selectAll();
         $availableTimes = $this->getAvailableTimes();
 
-
         if ($_SERVER["REQUEST_METHOD"] === 'POST') {
-            $question = $_POST;
-
-            $selectedTags = isset($_POST['tags']) ? $_POST['tags'] : [];
+            $question = array_map('trim', $_POST);
 
             foreach ($question as $key => $value) {
-                $question[$key] = is_string($value) ? trim($value) : $value;
+                $question[$key] = htmlentities($value, ENT_QUOTES, 'UTF-8');
             }
 
             $errors = $this->validate($question);
+
+            $selectedTags = $question['tags'];
 
             if (empty($errors)) {
                 $id = $questionManager->insert($question);
 
                 if (!empty($id)) {
                     header('Location:/');
+                    exit();
                 }
             }
-            //return null;
         }
-
-
         return $this->twig->render(
             'Question/add.html.twig',
             [
@@ -62,30 +57,23 @@ class QuestionController extends AbstractController
     {
         $times = [];
         $timezone = new DateTimeZone('Europe/Paris');
-        $startTime = new DateTime('now', $timezone);
-        $startTime->add(new DateInterval('PT30M'));
-
-
-        $minutes = intval($startTime->format('i'));
-        if ($minutes >= 30) {
-            $startTime->modify('+1 hour');
-            $startTime->setTime(intval($startTime->format('H')), 0);
-        } else {
-            $startTime->setTime(intval($startTime->format('H')), 30);
-        }
-
+        $currentDateTime = new DateTime('now', $timezone);
+        $startTime = new DateTime('09:30', $timezone);
         $endTime = new DateTime('19:30', $timezone);
-
         $interval = new DateInterval('PT30M');
 
+        $cutoffTime = new DateTime('19:30', $timezone);
+
+        if ($currentDateTime > $cutoffTime) {
+            $startTime->add(new DateInterval('P1D'));
+            $endTime->add(new DateInterval('P1D'));
+        }
         while ($startTime <= $endTime) {
             $times[] = $startTime->format('Y-m-d H:i:s');
             $startTime->add($interval);
         }
-
         return $times;
     }
-
 
     private function validate(array $question)
     {
