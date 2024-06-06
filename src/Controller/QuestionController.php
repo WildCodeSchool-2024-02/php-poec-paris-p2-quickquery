@@ -9,6 +9,8 @@ use App\Model\QuestionManager;
 use App\Model\TagManager;
 use App\Model\AlertManager;
 
+
+
 class QuestionController extends AbstractController
 {
     public function add(): ?string
@@ -21,6 +23,7 @@ class QuestionController extends AbstractController
         $availableTimes = $this->getAvailableTimes();
 
         if ($_SERVER["REQUEST_METHOD"] === 'POST') {
+
             $questionManager = new questionManager();
 
             if (isset($_POST['title'])) {
@@ -28,6 +31,11 @@ class QuestionController extends AbstractController
             }
             if (isset($_POST['description'])) {
                 $_POST['description'] = htmlentities(trim($_POST['description']), ENT_QUOTES, 'UTF-8');
+
+            $question = array_map('trim', $_POST);
+
+            foreach ($question as $key => $value) {
+                $question[$key] = htmlentities($value, ENT_QUOTES, 'UTF-8');
             }
 
             $question = $_POST;
@@ -40,7 +48,9 @@ class QuestionController extends AbstractController
                 $id = $questionManager->insert($question);
 
                 if (!empty($id)) {
+
                     header('Location:/?question=1');
+
                     exit();
                 }
             }
