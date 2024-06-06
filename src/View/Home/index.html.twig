@@ -2,21 +2,21 @@
 {% block content %}
 <div class="container">
     <h1><a href="/">QuickQuery.com</a></h1>
-    <p><a href="/add-question">Poser une question</a></p>
+    <p><a href="question/add">Poser une question</a></p>
 
     {% if msg is not empty %}
-        <div class="alert alert-success d-flex align-items-center" role="alert">           
+        <div class="alert alert-success d-flex align-items-center" role="alert">
             <i class="bi bi-check-circle-fill flex-shrink-0 me-2 mr-3" role="img" aria-label="Success:"></i>
             <div>{{ msg }}</div>
         </div>
     {% endif %}
 
     <div class="row">
-        <form id="alert-form" class="card" method="POST" action='/add-alert'>
-            <input type="hidden" name="questionId" value="42">
+        <form id="alert-form" class="card" method="POST" action='question/alert'>
+            <input type="hidden" name="questionId" value="41">
             <button type="submit" class="btn btn-dark">Alert</button>
         </form>
-        <form id="participation-form" class="card" method="POST" action=''>
+        <form id="participation-form" class="card" method="POST" action='#'>
             <input type="hidden" name="questionId" value="41">
             <button type="submit" class="btn btn-dark">Participate</button>
         </form>

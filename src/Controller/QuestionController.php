@@ -11,22 +11,27 @@ use App\Model\AlertManager;
 
 class QuestionController extends AbstractController
 {
-    public function addQuestion(): ?string
+    public function add(): ?string
     {
         $errors = [];
         $question = [];
         $selectedTags = [];
-        $tagManager = new TagManager();
-        $questionManager = new questionManager();
+        $tagManager = new TagManager();        
         $tags = $tagManager->selectAll();
         $availableTimes = $this->getAvailableTimes();
 
         if ($_SERVER["REQUEST_METHOD"] === 'POST') {
-            $question = array_map('trim', $_POST);
 
-            foreach ($question as $key => $value) {
-                $question[$key] = htmlentities($value, ENT_QUOTES, 'UTF-8');
+            $questionManager = new questionManager();
+
+            if (isset($_POST['title'])) {
+                $_POST['title'] = htmlentities(trim($_POST['title']), ENT_QUOTES, 'UTF-8');
             }
+            if (isset($_POST['description'])) {
+                $_POST['description'] = htmlentities(trim($_POST['description']), ENT_QUOTES, 'UTF-8');
+            }
+
+            $question = $_POST;
 
             $errors = $this->validate($question);
 
@@ -36,7 +41,7 @@ class QuestionController extends AbstractController
                 $id = $questionManager->insert($question);
 
                 if (!empty($id)) {
-                    header('Location:/');
+                    header('Location:/?question=1');
                     exit();
                 }
             }
@@ -110,25 +115,17 @@ class QuestionController extends AbstractController
         return $errors;
     }
 
-    public function addAlert(): string
+    public function alert(): void
     {
+        
+        $questionId = htmlentities(trim($_POST['questionId']));
+
+        $userId = 2;
+
         $alertManager = new AlertManager();
-        $msg = "";
+        $alertManager->insert($userId, $questionId);
 
-        if ($_SERVER["REQUEST_METHOD"] === 'POST') {
-            if (isset($_POST['questionId'])) {
-                $questionId = $_POST['questionId'];
-                $userId = 1;
+        header('Location: /?alert=1');
 
-                $isInserted = $alertManager->insert($userId, $questionId);
-
-                if ($isInserted === true) {
-                    $msg = "Alerte activée !";
-                }
-            }
-        }
-        return $this->twig->render('Home/index.html.twig', [
-            'msg' => $msg,
-        ]);
     }
 }

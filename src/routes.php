@@ -2,6 +2,6 @@
 
 return [
     '' => ['HomeController', 'index',],
-    'add-question' => ['QuestionController', 'addQuestion',],
-    'add-alert' => ['QuestionController', 'addAlert',],
+    'question/add' => ['QuestionController', 'add',],
+    'question/alert' => ['QuestionController', 'alert',],
 ];

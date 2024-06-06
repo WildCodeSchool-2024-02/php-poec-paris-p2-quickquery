@@ -10,12 +10,12 @@ class AlertManager extends AbstractManager
 
     public function insert($userId, $questionId): bool
     {
-            $statement = $this->pdo->prepare(
-                'INSERT INTO ' . self::TABLE . ' (user_id, question_id) VALUES (:userId, :questionId)'
-            );
-            $statement->bindParam(':userId', $userId, PDO::PARAM_INT);
-            $statement->bindParam(':questionId', $questionId, PDO::PARAM_INT);
+        $statement = $this->pdo->prepare(
+            'INSERT INTO ' . self::TABLE . ' (user_id, question_id) VALUES (:userId, :questionId)'
+        );
+        $statement->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $statement->bindParam(':questionId', $questionId, PDO::PARAM_INT);
 
-            return $statement->execute();
+        return $statement->execute();
     }
 }
