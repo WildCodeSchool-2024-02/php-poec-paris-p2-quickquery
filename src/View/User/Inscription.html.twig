@@ -1,0 +1,19 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <div class="container">
+
+        <h1 class="title">Inscription</h1>
+
+        {% if errors is not empty %}
+            {% for error in errors %}
+            <div class="alert alert-danger d-flex align-items-center" role="alert">
+                <i class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" role="img" aria-label="Danger:"></i>
+                <div>{{ error|raw }}</div>
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        {% include 'User/_form.html.twig' %}
+    </div>
+{% endblock %}
