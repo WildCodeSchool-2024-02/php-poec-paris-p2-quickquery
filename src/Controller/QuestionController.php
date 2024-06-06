@@ -8,7 +8,6 @@ use DateInterval;
 use App\Model\QuestionManager;
 use App\Model\TagManager;
 use App\Model\ParticipantManager;
-use App\Model\Participant;
 use App\Controller\AbstractController;
 
 class QuestionController extends AbstractController
@@ -113,15 +112,14 @@ class QuestionController extends AbstractController
 
     public function participate(): string
     {
-            $participantManager = new ParticipantManager();
-            $msg = "";
+        $participantManager = new ParticipantManager();
 
         if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             if (isset($_POST['questionId'])) {
                 $userId = 1;
                 $questionId = (int)$_POST['questionId'];
 
-                $isInserted = $participantManager->addToQuestion($userId, $questionId);
+                $participantManager->insert($userId, $questionId);
             }
         }
 

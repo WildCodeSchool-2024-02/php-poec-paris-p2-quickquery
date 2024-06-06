@@ -6,7 +6,7 @@ use App\Model\QuestionManager;
 use App\Model\HomeManager;
 use App\Model\ParticipantManager;
 
-class HomeController extends AbstractController
+class DashboardController extends AbstractController
 {
     public function index(): string
     {

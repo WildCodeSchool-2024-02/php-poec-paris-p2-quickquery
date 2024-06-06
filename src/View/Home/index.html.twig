@@ -14,7 +14,7 @@
           <p class="card-text">{{query.description }}</p>
         </div>
       
-<form id="participation-form" class="card" method="POST" action='/add-participant'>
+<form id="participation-form" class="card" method="POST" action='/question/participate'>
     <input type="hidden" name="userId" value="1">
     <input type="hidden" name="questionId" value={{ query.id }}>
     <button type="submit" class="btn btn-dark">Participate</button>
