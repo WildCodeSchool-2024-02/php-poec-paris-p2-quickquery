@@ -16,12 +16,11 @@ class QuestionController extends AbstractController
         $errors = [];
         $question = [];
         $selectedTags = [];
-        $tagManager = new TagManager();        
+        $tagManager = new TagManager();
         $tags = $tagManager->selectAll();
         $availableTimes = $this->getAvailableTimes();
 
         if ($_SERVER["REQUEST_METHOD"] === 'POST') {
-
             $questionManager = new questionManager();
 
             if (isset($_POST['title'])) {
@@ -117,7 +116,7 @@ class QuestionController extends AbstractController
 
     public function alert(): void
     {
-        
+
         $questionId = htmlentities(trim($_POST['questionId']));
 
         $userId = 2;
@@ -126,6 +125,5 @@ class QuestionController extends AbstractController
         $alertManager->insert($userId, $questionId);
 
         header('Location: /?alert=1');
-
     }
 }
