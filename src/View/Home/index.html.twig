@@ -1,6 +1,34 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-    <h1>QuickQuery.com</h1>
-    <p><a href="/question/add">Poser une question</a></p>
+<div class="container">
+    <h2 >Last Questions</h2>
+    <ul>
+     <div class="row ">
+    {% for query in lastQueries %}
+
+    <div class="card" 
+    style="width: 17rem">
+        <div class="card-body">
+          <h4 class="card-title">{{ query.title}}</h4>
+          <p class="card-text">{{query.description }}</p>
+        </div>
+      
+<form id="participation-form" class="card" method="POST" action='/add-participant'>
+    <input type="hidden" name="userId" value="1">
+    <input type="hidden" name="questionId" value={{ query.id }}>
+    <button type="submit" class="btn btn-dark">Participate</button>
+</form>
+       
+<div class="card-footer bg-transparent">
+        <span class="badge bg-dark">{{query.name }}</span>
+       </div>
+
+    <hr>
+</div>
+{% endfor %}
+    </div>
+  </ul>
+</div>
+
 {% endblock %}

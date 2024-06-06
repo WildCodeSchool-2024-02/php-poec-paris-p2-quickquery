@@ -2,16 +2,18 @@
 
 namespace App\Controller;
 
+use App\Model\QuestionManager;
 use App\Model\HomeManager;
+use App\Model\ParticipantManager;
 
 class HomeController extends AbstractController
 {
     public function index(): string
     {
 
-        $queries = new HomeManager();
-        $lastQueries = $queries->select5Last();
+        $questionManager = new QuestionManager();
+        $lastQuestions = $questionManager->selectMostRecent();
 
-        return $this->twig->render('Home/index.html.twig', ['lastQueries' => $lastQueries]);
+        return $this->twig->render('Home/index.html.twig', ['lastQueries' => $lastQuestions]);
     }
 }
