@@ -12,31 +12,24 @@ class LogController extends AbstractController
      * Add a new inscription
      */
 
-     public function processLogin() {
+    public function processLogin(): ?string
+    {
 
         $errors = [];
-        $UserManager = new UserManager();
+        $userManager = new UserManager();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = $_POST['email'] ?? '';
             $password = $_POST['password'] ?? '';
 
-
             $errors = $this->validate($email, $password);
 
-
-            // Vérification de l'utilisateur dans la base de données
-            
-            
             if (empty($errors)) {
+                $user = $userManager->getByEmail($email);
 
-                $user = $UserManager->getByEmail($email);
-                
-                // Authentification réussie
                 session_start();
                 $_SESSION['user'] = $user ;
-                
-                
+
                 return $this->twig->render(
                     'Home/index.html.twig',
                     [
@@ -44,14 +37,13 @@ class LogController extends AbstractController
                         'user' => $user,
                     ]
                 );
-
             }
-        } 
+        }
 
         return $this->twig->render(
             'User/Login.html.twig',
             [
-                'errors' => $errors,
+               'errors' => $errors,
 
             ]
         );
@@ -62,21 +54,19 @@ class LogController extends AbstractController
         session_unset();
         header('Location: /');
     }
-    
 
 
     private function validate($email, $password)
     {
         $errors = [];
-        $UserManager = new UserManager();
-        $user = $UserManager->getByEmail($email);
+        $userManager = new UserManager();
+        $user = $userManager->getByEmail($email);
 
         if (empty($email)) {
             $errors['email'] = 'L\'email est requis.';
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errors['email'] = 'L\'email n\'est pas valide.';
         }
-
 
         if (empty($password)) {
             $errors['password'] = 'Le mot de passe est requis.';
@@ -86,6 +76,4 @@ class LogController extends AbstractController
 
         return $errors;
     }
-
-    
 }

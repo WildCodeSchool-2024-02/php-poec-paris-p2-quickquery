@@ -14,7 +14,7 @@ class InscriptionController extends AbstractController
     {
         $errors = [];
         $inscription = [];
-        $UserManager = new UserManager();
+        $userManager = new UserManager();
 
 
         if ($_SERVER["REQUEST_METHOD"] === 'POST') {
@@ -28,7 +28,7 @@ class InscriptionController extends AbstractController
             $errors = $this->validate($inscription);
 
             if (empty($errors)) {
-                $id = $UserManager->insert($inscription);
+                $id = $userManager->insert($inscription);
 
                 if (!empty($id)) {
                     header('Location:/');
@@ -51,40 +51,28 @@ class InscriptionController extends AbstractController
     private function validate(array $inscription)
     {
         $errors = [];
-        $UserManager = new UserManager();
+        $userManager = new UserManager();
 
         if (empty($inscription['pseudo'])) {
             $errors[] = 'Le champ \'pseudo\' est à remplir';
         }
-        
+
         if (empty($inscription['email'])) {
             $errors['email'] = 'L\'email est requis.';
         } elseif (!filter_var($inscription['email'], FILTER_VALIDATE_EMAIL)) {
             $errors['email'] = 'L\'email n\'est pas valide.';
-        } elseif ($UserManager->emailExists($inscription['email'])) {
+        } elseif ($userManager->emailExists($inscription['email'])) {
             $errors['email'] = 'Cet email est déjà utilisé. <a href="   /login">Voulez-vous vous connecter ?</a>';
         }
-        
+
         if (empty($inscription['password'])) {
             $errors['password'] = 'Le mot de passe est requis.';
         } elseif (strlen($inscription['password']) < 8) {
             $errors['password'] = 'Le mot de passe doit contenir au moins 8 caractères.';
-        } elseif (!preg_match('/[A-Za-z]/', $inscription['password']) || !preg_match('/[0-9]/', $inscription['password'])) {
+        } elseif (!preg_match('/[A-Za-z].*[0-9]|[0-9].*[A-Za-z]/', $inscription['password'])) {
             $errors['password'] = 'Le mot de passe doit contenir des lettres et des chiffres.';
         }
 
         return $errors;
     }
-
-    private function sendConfirmationEmail($email, $pseudo)
-    {
-        $to = $email;
-        $subject = "Confirmation d'inscription";
-        $message = "Bonjour $pseudo,\n\nMerci de vous être inscrit !\n\nCordialement,\nL'équipe";
-        $headers = "From: no-reply@votresite.com";
-        
-        mail($to, $subject, $message, $headers);
-    }
-
-    
 }
