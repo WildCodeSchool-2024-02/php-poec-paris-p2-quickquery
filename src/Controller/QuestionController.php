@@ -21,7 +21,6 @@ class QuestionController extends AbstractController
         $availableTimes = $this->getAvailableTimes();
 
         if ($_SERVER["REQUEST_METHOD"] === 'POST') {
-
             $questionManager = new questionManager();
 
             $question = $_POST;
@@ -41,7 +40,6 @@ class QuestionController extends AbstractController
                 $id = $questionManager->insert($question);
 
                 if (!empty($id)) {
-
                     header('Location:/?question=1');
 
                     exit();
