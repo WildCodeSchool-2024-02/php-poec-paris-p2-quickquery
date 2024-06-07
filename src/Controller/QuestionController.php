@@ -7,24 +7,29 @@ use DateTimeZone;
 use DateInterval;
 use App\Model\QuestionManager;
 use App\Model\TagManager;
+use App\Model\AlertManager;
 
 class QuestionController extends AbstractController
 {
-    public function add(): ?string
+    public function add(): string
     {
         $errors = [];
         $question = [];
         $selectedTags = [];
         $tagManager = new TagManager();
-        $questionManager = new questionManager();
         $tags = $tagManager->selectAll();
         $availableTimes = $this->getAvailableTimes();
 
         if ($_SERVER["REQUEST_METHOD"] === 'POST') {
-            $question = array_map('trim', $_POST);
+            $questionManager = new questionManager();
 
-            foreach ($question as $key => $value) {
-                $question[$key] = htmlentities($value, ENT_QUOTES, 'UTF-8');
+            $question = $_POST;
+
+            if (isset($_POST['title'])) {
+                $_POST['title'] = htmlentities(trim($_POST['title']), ENT_QUOTES, 'UTF-8');
+            }
+            if (isset($_POST['description'])) {
+                $_POST['description'] = htmlentities(trim($_POST['description']), ENT_QUOTES, 'UTF-8');
             }
 
             $errors = $this->validate($question);
@@ -35,7 +40,8 @@ class QuestionController extends AbstractController
                 $id = $questionManager->insert($question);
 
                 if (!empty($id)) {
-                    header('Location:/');
+                    header('Location:/?question=1');
+
                     exit();
                 }
             }
@@ -53,7 +59,7 @@ class QuestionController extends AbstractController
         );
     }
 
-    public function getAvailableTimes(): array
+    private function getAvailableTimes(): array
     {
         $times = [];
         $timezone = new DateTimeZone('Europe/Paris');
@@ -75,7 +81,7 @@ class QuestionController extends AbstractController
         return $times;
     }
 
-    private function validate(array $question)
+    private function validate(array $question): array
     {
         $errors = [];
 
@@ -107,5 +113,18 @@ class QuestionController extends AbstractController
         }
 
         return $errors;
+    }
+
+    public function alert(): void
+    {
+
+        $questionId = htmlentities(trim($_POST['questionId']));
+
+        $userId = 2;
+
+        $alertManager = new AlertManager();
+        $alertManager->insert($userId, $questionId);
+
+        header('Location: /?alert=1');
     }
 }
