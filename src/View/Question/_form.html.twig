@@ -1,0 +1,50 @@
+{# TODO : manage errors display #}
+<form method="post" id="form-question" class="card">
+    <div class="row card-body">
+        <div class="col-md-6">
+            <input type="hidden" value="{{ question.id }}" name="id">
+            <div class="form-group">
+                <input type="text" placeholder="Titre de votre question" value="{{ question.title }}" name="title" id="title" class="form-control">
+            </div>
+            <div class="form-group">
+                <textarea name="description" placeholder="Description de votre question" id="description" rows="8" cols="50" class="form-control">{{ question.description }}</textarea>
+            </div>
+        </div>
+        <div class="col-md-6 d-flex flex-column justify-content-between">
+
+            <div class="form-group">
+                <label for="scheduled_at">Heure du meeting</label>
+                <select id="scheduled_at" name="scheduled_at" class="form-control">
+                    {% for time in availableTimes %}
+                        <option value="{{ time }}" {% if time == question.scheduled_at or time == current_time %}selected{% endif %}>
+                            {{ time }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <button type="button" id="toggleTagsButton" class="btn btn-secondary">Choisir des tags </button>
+                <span class="icon-circle" id="helpBtTags">
+                    <i class="bi bi-info flex-shrink-0 me-2" role="img" aria-label="Info"></i>
+                </span>
+                <div class="alert alert-light d-none" role="alert" id="layerHelpMsg">
+                    CTRL + Click pour multi-selectionner les tags !
+                </div>
+                
+                <div id="tagsDropdown" style="display: none; margin-top: 10px;">
+                    <select name="tags[]" id="tagsSelect" multiple class="form-control">
+                        {% for tag in tags %}
+                            <option value="{{ tag.id }}" {% if tag.id in selectedTags %}selected{% endif %}>{{ tag.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div id="selectedTagsDisplay" class="form-group"></div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-outline-dark btn-lg w100">Poser la question !</button>
+            </div>
+        </div>
+    </div>
+
+</form>
