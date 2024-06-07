@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Model\QuestionManager;
-use App\Model\HomeManager;
 use App\Model\ParticipantManager;
 
 class DashboardController extends AbstractController
