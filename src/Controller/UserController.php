@@ -13,17 +13,16 @@ class UserController extends AbstractController
     public function register(): ?string
     {
         $errors = [];
-        $inscription = [];
+        $user = [];
 
         if ($_SERVER["REQUEST_METHOD"] === 'POST') {
-            $inscription = $_POST;
             $userManager = new UserManager();
 
             $user = array_map('htmlentities', array_map('trim', $_POST));
-            $errors = $this->validateRegister($inscription);
+            $errors = $this->validateRegister($user);
 
             if (empty($errors)) {
-                $id = $userManager->insert($inscription);
+                $id = $userManager->insert($user);
 
                 if (!empty($id)) {
                     header('Location:/');
@@ -34,7 +33,7 @@ class UserController extends AbstractController
             'User/Inscription.html.twig',
             [
                 'errors' => $errors,
-                'inscription' => $inscription,
+                'user' => $user,
 
             ]
         );
@@ -95,7 +94,7 @@ class UserController extends AbstractController
             $errors['email'] = 'L\'email est requis.';
         } elseif (!filter_var($user['email'], FILTER_VALIDATE_EMAIL)) {
             $errors['email'] = 'L\'email n\'est pas valide.';
-        } elseif ($userManager->geByEmail($user['email'])) {
+        } elseif ($userManager->getByEmail($user['email'])) {
             $errors['email'] = 'Cet email est déjà utilisé. <a href="   /login">Voulez-vous vous connecter ?</a>';
         }
 
