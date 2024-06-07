@@ -5,10 +5,10 @@
 
     {% if session.user is defined %}
         <p>Bonjour, {{ session.user.pseudo }} !</p>
-        <p><a href="index">Déconnexion</a></p>
+        <p><a href="logout">Déconnexion</a></p>
         <p><a href="question/add">Poser une question</a></p>
     {% else %}
-        <p><a href="inscription">S'inscrire</a></p>
+        <p><a href="register">S'inscrire</a></p>
         <p><a href="login">Connexion</a></p>
     {% endif %}
 {% endblock %}

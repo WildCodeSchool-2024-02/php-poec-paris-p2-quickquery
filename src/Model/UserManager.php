@@ -39,13 +39,6 @@ class UserManager extends AbstractManager
         return $userId;
     }
 
-    public function emailExists(string $email)
-    {
-        $query = $this->pdo->prepare('SELECT COUNT(*) FROM user WHERE email = :email');
-        $query->execute(['email' => $email]);
-        return $query->fetchColumn() > 0;
-    }
-
     public function getByEmail(string $email): array
     {
         $statement = $this->pdo->prepare('SELECT * FROM user WHERE email = :email');

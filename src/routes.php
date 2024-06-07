@@ -3,7 +3,7 @@
 return [
     '' => ['HomeController', 'index',],
     'question/add' => ['QuestionController', 'add',],
-    'inscription' => ['InscriptionController', 'add',],
-    'login' => ['LogController', 'processLogin',],
-    'index' => ['LogController', 'logout',],
+    'register' => ['UserController', 'register',],
+    'login' => ['UserController', 'login',],
+    'logout' => ['UserController', 'logout',],
 ];
