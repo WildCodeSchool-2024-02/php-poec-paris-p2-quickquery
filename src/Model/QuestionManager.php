@@ -39,12 +39,6 @@ class QuestionManager extends AbstractManager
         return $questionId;
     }
 
-    public function select5Last(): array
-    {
-        $stmt = $this->pdo->query('SELECT * FROM ' . self::TABLE . ' ORDER BY created_at DESC LIMIT 5');
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
     public function selectOneById(int $id): array|false
     {
         $statement = $this->pdo->prepare("SELECT * FROM " . self::TABLE . " WHERE id=:id");
@@ -52,12 +46,5 @@ class QuestionManager extends AbstractManager
         $statement->execute();
 
         return $statement->fetch();
-    }
-
-    public function delete(int $id): void
-    {
-        $statement = $this->pdo->prepare("DELETE FROM " . self::TABLE . " WHERE id=:id");
-        $statement->bindValue('id', $id, \PDO::PARAM_INT);
-        $statement->execute();
     }
 }

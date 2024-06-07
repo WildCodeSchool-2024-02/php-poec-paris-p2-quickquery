@@ -10,10 +10,9 @@ class DashboardController extends AbstractController
 {
     public function index(): string
     {
-
         $questionManager = new QuestionManager();
         $lastQuestions = $questionManager->selectMostRecent();
 
-        return $this->twig->render('Home/index.html.twig', ['lastQueries' => $lastQuestions]);
+        return $this->twig->render('Home/index.html.twig', ['lastQuestions' => $lastQuestions]);
     }
 }

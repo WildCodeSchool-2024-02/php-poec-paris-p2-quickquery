@@ -112,9 +112,8 @@ class QuestionController extends AbstractController
 
     public function participate(): string
     {
-        $participantManager = new ParticipantManager();
-
         if ($_SERVER["REQUEST_METHOD"] === 'POST') {
+            $participantManager = new ParticipantManager();
             if (isset($_POST['questionId'])) {
                 $userId = 1;
                 $questionId = (int)$_POST['questionId'];
