@@ -1,7 +1,7 @@
 <?php
 
 return [
-    '' => ['HomeController', 'index',],
+    '' => ['HomeController', 'index'],
     'question/add' => ['QuestionController', 'add',],
     'participate/add' => ['ParticipantController', 'participate'],
 ];

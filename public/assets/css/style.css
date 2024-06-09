@@ -69,3 +69,8 @@ body {
     z-index: 1000;
     font-size: .9rem;
 }
+
+#logo {
+    width: 19rem;
+    height: 5rem;
+}

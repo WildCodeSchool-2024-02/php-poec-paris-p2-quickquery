@@ -4,6 +4,8 @@ namespace App\Model;
 
 use App\Model\Connection;
 use PDO;
+use Exception;
+use InvalidArgumentException;
 
 /**
  * Abstract class handling default manager.
@@ -18,17 +20,15 @@ class HomeManager extends AbstractManager
         $this->pdo = $connection->getConnection();
     }
 
-    /**
-     * Get all row from database.
-     */
-    //'SELECT * FROM question_tag
-    // JOIN question ON question.id=question_tag.question_id
-    // JOIN tag ON tag.id=question_tag.tag_id
-    // ORDER BY created_at DESC LIMIT 5 ;'
     public function select5Last(): array
     {
-        $stmt = $this->pdo->query('SELECT * FROM question ORDER BY created_at DESC LIMIT 5;');
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt = $this->pdo->query("SELECT * FROM question ORDER BY created_at DESC LIMIT 5");
+
+        if ($stmt) {
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } else {
+            throw new Exception('Erreur lors de la récupération des derniers résultats');
+        }
     }
 
     /**
@@ -53,5 +53,28 @@ class HomeManager extends AbstractManager
         $statement = $this->pdo->prepare("DELETE FROM " . static::TABLE . " WHERE id=:id");
         $statement->bindValue('id', $id, \PDO::PARAM_INT);
         $statement->execute();
+    }
+    public function search(): array
+    {
+        $query = isset($_GET['query']) ? $_GET['query'] : '';
+        if (!is_string($query)) {
+            throw new \InvalidArgumentException('Le paramètre $query doit être une chaîne de caractères.');
+        }
+        $stmt = $this->pdo->prepare("SELECT * FROM question WHERE title LIKE :query OR description LIKE :query ORDER BY created_at DESC");
+        $searchQuery = '%' . $query . '%';
+        $stmt->bindValue(':query', $searchQuery, PDO::PARAM_STR);
+
+        if ($stmt->execute()) {
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } else {
+            throw new Exception('Erreur lors de la recherche');
+        }
+    }
+
+    public function searchByTag(): array
+    {
+        $stmt = $this->pdo->query('SELECT * FROM question ORDER BY created_at DESC LIMIT 5;');
+        // $stmt->bindValue('id', $id, \PDO::PARAM_INT);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

@@ -24,7 +24,7 @@ class QuestionManager extends AbstractManager
         $statement->bindValue(':scheduled_at', $question['scheduled_at'], PDO::PARAM_STR);
         $statement->execute();
 
-        $questionId = (int)$this->pdo->lastInsertId();
+        $questionId = (int) $this->pdo->lastInsertId();
 
         if (isset($question['tags']) && is_array($question['tags'])) {
             foreach ($question['tags'] as $tagId) {

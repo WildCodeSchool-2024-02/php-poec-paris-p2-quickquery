@@ -3,15 +3,36 @@
 namespace App\Controller;
 
 use App\Model\HomeManager;
+use Exception;
 
 class HomeController extends AbstractController
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->homeManager = new HomeManager();
+    }
     public function index(): string
     {
-        // require_once '/../Model/HomeManager.php';
         $homeManager = new HomeManager();
-        $lastQueries = $homeManager->select5Last();
-        // var_dump($lastQueries);
-        return $this->twig->render('Home/index.html.twig', ['lastQueries' => $lastQueries]);
+
+        // Vérifie si une requête de recherche a été effectuée
+        $query = $_GET['query'] ?? null;
+
+        try {
+            if ($query) {
+                // Recherche des résultats basés sur la requête
+                $results = $homeManager->search();
+            } else {
+                // Sélectionne les 5 derniers résultats
+                $results = $homeManager->select5Last();
+            }
+
+            // Rend le template avec les résultats
+            return $this->twig->render('Home/index.html.twig', ['results' => $results]);
+        } catch (Exception $e) {
+            // Gestion des erreurs
+            return $this->twig->render('Home/index.html.twig', ['error' => $e->getMessage()]);
+        }
     }
 }

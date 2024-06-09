@@ -2,38 +2,70 @@
 
 {% block content %}
 	<div class="container">
-		<h2>Last Questions</h2>
-		<ul>
+		<h1>Résultats de recherche pour "{{ query }}"</h1>
+		{% if results is empty %}
+			<p>Aucun résultat trouvé.</p>
+		{% else %}
+
 			<div class="row ">
-				{% for query in lastQueries %}
+				{% for result in results %}
+
 
 					<div
 						class="card" style="width: 17rem">
 						{# <hr> #}
 						<div class="card-body">
-							<h4 class="card-title">{{ query.title}}</h4>
-							<p class="card-text">{{query.description }}</p>
+							<h4 class="card-title">{{ result.title}}</h4>
+
+							<p class="card-text">{{result.description }}</p>
+
 						</div>
 
 						{# <ul class="list-group list-group-flush"> #}
 						<form id="participation-form" class="card" method="POST" action='/participate/add'>
 							<input type="hidden" name="user_id" value="1">
-							<input type="hidden" name="question_id" value={{ query.id }}>
+							<input type="hidden" name="question_id" value={{ result.id }}>
+
 							<button type="submit" class="btn btn-dark">Participate</button>
 						</form>
 
 						<div class="card-footer bg-transparent">
-							<span class="badge bg-dark">{{query.name }}</span>
-							{# {% for tag in tags %}
-																												        {% endfor %} #}
+							<span class="badge bg-dark">{{result.name }}</span>
 						</div>
-						{# </ul> #}
+						<small>Créé le:
+							{{ result.created_at|date('d/m/Y H:i') }}</small>
 
-						<hr>
 					</div>
+					{# </ul> #}
+
+					<hr>
 				{% endfor %}
 			</div>
-		</ul>
-	</div>
+			<script>
+				$(document).ready(function () {
+$('#participation-form').on('submit', function (e) {
 
+e.preventDefault();
+var query = $('#query').val();
+$.ajax({
+url: 'search.php',
+type: 'GET',
+data: {
+query: query
+},
+success: function (data) {
+$('#results').html(data);
+},
+error: function (xhr) {
+$('#results').html('Une erreur s\'est produite.');
+}
+});
+});
+});
+			</script>
+
+
+		{% endif %}
+
+	</div>
 {% endblock %}

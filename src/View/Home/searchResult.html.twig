@@ -1,0 +1,49 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Résultats de recherche
+{% endblock %}
+
+{% block body %}
+	<h1>Résultats de recherche pour "{{ query }}"</h1>
+
+	{% if results is empty %}
+		<p>Aucun résultat trouvé.</p>
+	{% else %}
+
+		<div class="row ">
+			{% for result in results %}
+
+
+				<div
+					class="card" style="width: 17rem">
+					{# <hr> #}
+					<div class="card-body">
+						<h4 class="card-title">{{ result.title}}</h4>
+
+						<p class="card-text">{{result.description }}</p>
+
+					</div>
+
+					{# <ul class="list-group list-group-flush"> #}
+					<form id="participation-form" class="card" method="POST" action='/participate/add'>
+						<input type="hidden" name="user_id" value="1">
+						<input type="hidden" name="question_id" value={{ result.id }}>
+
+						<button type="submit" class="btn btn-dark">Participate</button>
+					</form>
+
+					<div class="card-footer bg-transparent">
+						<span class="badge bg-dark">{{result.name }}</span>
+					</div>
+					<small>Créé le:
+						{{ result.created_at|date('d/m/Y H:i') }}</small>
+
+				</div>
+				{# </ul> #}
+
+				<hr>
+			{% endfor %}
+		</div>
+
+	{% endif %}
+{% endblock %}
