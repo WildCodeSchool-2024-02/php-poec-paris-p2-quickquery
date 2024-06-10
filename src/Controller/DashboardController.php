@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
-class HomeController extends AbstractController
+use App\Model\QuestionManager;
+
+class DashboardController extends AbstractController
 {
     public function index(): string
     {
@@ -17,8 +19,13 @@ class HomeController extends AbstractController
             $msg = "Participation ajoutée avec succès !";
         }
 
+        $questionManager = new QuestionManager();
+        $lastQuestions = $questionManager->selectMostRecent();
+
         return $this->twig->render('Home/index.html.twig', [
-            'msg' => $msg,
+            'lastQuestions' => $lastQuestions,
+            'msg' => $msg
         ]);
     }
+    
 }
