@@ -8,6 +8,7 @@ use DateInterval;
 use App\Model\QuestionManager;
 use App\Model\TagManager;
 use App\Model\AlertManager;
+use App\Model\ParticipantManager;
 
 class QuestionController extends AbstractController
 {
@@ -21,7 +22,7 @@ class QuestionController extends AbstractController
         $availableTimes = $this->getAvailableTimes();
 
         if ($_SERVER["REQUEST_METHOD"] === 'POST') {
-            $questionManager = new questionManager();
+            $questionManager = new QuestionManager();
 
             $question = $_POST;
 
@@ -54,7 +55,6 @@ class QuestionController extends AbstractController
                 'selectedTags' => $selectedTags,
                 'question' => $question,
                 'availableTimes' => $availableTimes,
-
             ]
         );
     }
@@ -115,9 +115,24 @@ class QuestionController extends AbstractController
         return $errors;
     }
 
+    public function participate(): string
+    {
+        if ($_SERVER["REQUEST_METHOD"] === 'POST') {
+            $participantManager = new ParticipantManager();
+            if (isset($_POST['questionId'])) {
+                $userId = 1;
+                $questionId = (int)$_POST['questionId'];
+
+                $participantManager->insert($userId, $questionId);
+            }
+        }
+
+        return $this->twig->render('Home/index.html.twig', [
+        ]);
+    }
+
     public function alert(): void
     {
-
         $questionId = htmlentities(trim($_POST['questionId']));
 
         $userId = 2;

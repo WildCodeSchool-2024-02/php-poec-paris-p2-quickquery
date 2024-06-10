@@ -2,12 +2,17 @@
 
 namespace App\Model;
 
-use App\Model\TagManager;
 use PDO;
 
 class QuestionManager extends AbstractManager
 {
     public const TABLE = 'question';
+
+    public function selectMostRecent()
+    {
+        $statement = $this->pdo->query("SELECT * FROM " . self::TABLE . " ORDER BY created_at DESC LIMIT 5");
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
 
     public function insert(array $question): int
     {
