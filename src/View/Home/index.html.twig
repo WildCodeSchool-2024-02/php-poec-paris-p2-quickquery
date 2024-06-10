@@ -1,14 +1,64 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-    <h1>QuickQuery.com</h1>
-
-    {% if session.user is defined %}
-        <p>Bonjour, {{ session.user.pseudo }} !</p>
-        <p><a href="logout">Déconnexion</a></p>
-        <p><a href="question/add">Poser une question</a></p>
-    {% else %}
-        <p><a href="register">S'inscrire</a></p>
-        <p><a href="login">Connexion</a></p>
+<div class="container">
+    <h2>Last Questions</h2>
+    {% if msg is not empty %}
+        <div class="alert alert-success d-flex align-items-center" role="alert">
+            <i class="bi bi-check-circle-fill flex-shrink-0 me-2 mr-3" role="img" aria-label="Success:"></i>
+            <div>{{ msg }}</div>
+        </div>
     {% endif %}
+    <div class="grid-container">
+        {% for query in lastQuestions %}
+        <div class="grid-item">
+            <div class="row">
+                <div class="info-row">
+                    <div class="avatar">
+                        <i class="bi bi-person-circle icon-large"></i>
+                    </div>
+                    <div class="time">
+                        <span class="time-label">Meeting</span>
+                        <div class="time-container">
+                            <span class="time-display">{{ query.scheduled_at|date("H\\hi") }}</span>
+                        </div>
+                    </div>
+                    <div class="capacity">
+                        <span class="capacity-label">Capacity</span>
+                        <div class="capacity-container">
+                            <span class="capacity-display">{{ query.participant_count }}/5</span>
+                        </div>
+                    </div>
+                    <div class="participate">
+                        <form id="participation-form" method="POST" action="/question/participate">
+                            <input type="hidden" name="userId" value="1">
+                            <input type="hidden" name="questionId" value="{{ query.id }}">
+                            <button type="submit" class="btn-card"><i class="bi bi-hand-index-thumb"></i></button>
+                        </form>
+                    </div>
+                    <div class="like">
+                        <form id="like-form" method="POST" action="/question/alert">
+                            <input type="hidden" name="userId" value="1">
+                            <input type="hidden" name="questionId" value="{{ query.id }}">
+                            <button type="submit" class="btn-card"><i class="bi bi-bell"></i></button>
+                        </form>
+                    </div>
+                </div>
+                <div class="card-question">
+                    <div class="card-body">
+                        <h4 class="card-title">{{ query.title }}</h4>
+                        <p class="card-text">{{ query.description }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <span>{{ query.name }}</span>
+                    </div>
+                </div>
+                <div class="card-tag">
+                    <h6><span class="badge text-bg-secondary">{{ query.tag_list }}</span></h6>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}
