@@ -11,17 +11,6 @@ class QuestionManager extends AbstractManager
     public function selectMostRecent()
     {
 
-/*         $statement = $this->pdo->query("
-            SELECT q.*, COUNT(p.user_id) as participant_count, GROUP_CONCAT(t.name SEPARATOR ', ') as tag_list
-            FROM " . self::TABLE . " AS q
-            LEFT JOIN participant AS p ON q.id = p.question_id
-            LEFT JOIN question_tag AS qt ON q.id = qt.question_id
-            LEFT JOIN tag AS t ON qt.tag_id = t.id
-            GROUP BY q.id
-            ORDER BY q.created_at DESC
-            LIMIT 6
-        ");
- */
             $statement = $this->pdo->query("
                 SELECT q.*, 
                     COUNT(DISTINCT p.user_id) as participant_count, 

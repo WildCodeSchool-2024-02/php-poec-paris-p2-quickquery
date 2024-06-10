@@ -30,7 +30,7 @@ class UserController extends AbstractController
             }
         }
         return $this->twig->render(
-            'User/Inscription.html.twig',
+            'User/inscription.html.twig',
             [
                 'errors' => $errors,
                 'user' => $user,
@@ -66,7 +66,7 @@ class UserController extends AbstractController
         }
 
         return $this->twig->render(
-            'User/Login.html.twig',
+            'User/login.html.twig',
             [
                'errors' => $errors,
 
