@@ -9,6 +9,7 @@
             <div>{{ msg }}</div>
         </div>
     {% endif %}
+
     <div class="grid-container">
         {% for query in lastQuestions %}
         <div class="grid-item">
@@ -53,12 +54,11 @@
                         <span>{{ query.name }}</span>
                     </div>
                 </div>
-                <div class="card-tag">
-                    <h6><span class="badge text-bg-secondary">{{ query.tag_list }}</span></h6>
-                </div>
             </div>
         </div>
         {% endfor %}
     </div>
+    
+
 </div>
 {% endblock %}

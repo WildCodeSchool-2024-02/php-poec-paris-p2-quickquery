@@ -6,6 +6,7 @@ use DateTime;
 use DateTimeZone;
 use DateInterval;
 use App\Model\QuestionManager;
+use App\Model\ParticipantManager;
 use App\Model\TagManager;
 use App\Model\AlertManager;
 
@@ -127,4 +128,25 @@ class QuestionController extends AbstractController
 
         header('Location: /?alert=1');
     }
+
+    public function participate(): void
+    {
+        if ($_SERVER["REQUEST_METHOD"] === 'POST') {
+            $participantManager = new ParticipantManager();
+            if (isset($_POST['questionId'])) {
+                $userId = 1;
+                $questionId = (int) $_POST['questionId'];
+
+                $participantManager->insert($userId, $questionId);
+                header('Location: /?participant=1');
+
+            }
+        }
+    }
+
+/*     public function countParticipants(int $questionId): int
+    {
+        $participantManager = new ParticipantManager();
+        return $participantManager->countByQuestionId($questionId);
+    } */
 }
