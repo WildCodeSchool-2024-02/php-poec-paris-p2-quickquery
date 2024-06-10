@@ -54,27 +54,20 @@ class HomeManager extends AbstractManager
         $statement->bindValue('id', $id, \PDO::PARAM_INT);
         $statement->execute();
     }
-    public function search(): array
+    public function search(string $query): array
     {
-        $query = isset($_GET['query']) ? $_GET['query'] : '';
-        if (!is_string($query)) {
-            throw new \InvalidArgumentException('Le paramètre $query doit être une chaîne de caractères.');
-        }
         $stmt = $this->pdo->prepare("SELECT * FROM question WHERE title LIKE :query OR description LIKE :query ORDER BY created_at DESC");
-        $searchQuery = '%' . $query . '%';
-        $stmt->bindValue(':query', $searchQuery, PDO::PARAM_STR);
+        $query = '%' . $query . '%';
+        $stmt->bindValue(':query', $query, PDO::PARAM_STR);
 
-        if ($stmt->execute()) {
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } else {
-            throw new Exception('Erreur lors de la recherche');
-        }
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
     }
 
     public function searchByTag(): array
     {
         $stmt = $this->pdo->query('SELECT * FROM question ORDER BY created_at DESC LIMIT 5;');
-        // $stmt->bindValue('id', $id, \PDO::PARAM_INT);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

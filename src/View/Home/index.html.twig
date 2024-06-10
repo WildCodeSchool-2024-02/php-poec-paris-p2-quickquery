@@ -36,34 +36,9 @@
 							{{ result.created_at|date('d/m/Y H:i') }}</small>
 
 					</div>
-					{# </ul> #}
-
 					<hr>
 				{% endfor %}
 			</div>
-			<script>
-				$(document).ready(function () {
-$('#participation-form').on('submit', function (e) {
-
-e.preventDefault();
-var query = $('#query').val();
-$.ajax({
-url: 'search.php',
-type: 'GET',
-data: {
-query: query
-},
-success: function (data) {
-$('#results').html(data);
-},
-error: function (xhr) {
-$('#results').html('Une erreur s\'est produite.');
-}
-});
-});
-});
-			</script>
-
 
 		{% endif %}
 
