@@ -3,5 +3,6 @@
 return [
     '' => ['DashboardController', 'index',],
     'question/add' => ['QuestionController', 'add',],
-    'question/participate' => ['QuestionController', 'participate']
+    'question/participate' => ['QuestionController', 'participate'],
+    'question/alert' => ['QuestionController', 'alert',],
 ];
