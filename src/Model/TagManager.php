@@ -19,4 +19,13 @@ class TagManager extends AbstractManager
         $statement->bindValue(':tag_id', $tagId, PDO::PARAM_INT);
         $statement->execute();
     }
+
+    public function allQuestionByTag(int $tagId): array
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM question q JOIN question_tag qt ON q.id = qt.question_id JOIN " . self::TABLE . " t ON qt.tag_id = t.id WHERE t.id = :tagId ");
+        $stmt->bindValue(':tagId', $tagId, PDO::PARAM_STR);
+
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
