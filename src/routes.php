@@ -1,7 +1,9 @@
 <?php
 
 return [
-    '' => ['HomeController', 'index'],
+
+    '' => ['DashboardController', 'index',],
     'question/add' => ['QuestionController', 'add',],
-    'participate/add' => ['ParticipantController', 'participate'],
+    'question/participate' => ['QuestionController', 'participate'],
+    'question/alert' => ['QuestionController', 'alert',],
 ];

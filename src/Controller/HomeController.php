@@ -14,15 +14,17 @@ class HomeController extends AbstractController
     }
     public function index(): string
     {
-        $homeManager = new HomeManager();
-        $query = $_POST['query'] ?? null;
-        $query = trim($query);
-        $query = htmlentities($query, ENT_QUOTES, 'UTF-8');
-        if ($query) {
-            $results = $homeManager->search($query);
-        } else {
-            $results = $homeManager->select5Last();
+        $msg = "";
+      
+        if (isset($_GET['alert']) && $_GET['alert'] == 1) {
+            $msg = "Alerte activée !";
+        } elseif (isset($_GET['question']) && $_GET['question'] == 1) {
+            $msg = "Question ajoutée avec succès !";
+        } elseif (isset($_GET['participant']) && $_GET['participant'] == 1) {
+            $msg = "Participation ajoutée avec succès !";
         }
-        return $this->twig->render('Home/index.html.twig', ['results' => $results, 'query' => $query]);
+        return $this->twig->render('Home/index.html.twig', [
+            'msg' => $msg,
+        ]);
     }
 }

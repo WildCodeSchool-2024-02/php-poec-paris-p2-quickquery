@@ -14,15 +14,15 @@ class ParticipantManager extends AbstractManager
     /**
      * Add a new participant to the database
      */
-    public function addParticipant($userId, $questionId)
-    {
-        $statement = $this->pdo->prepare(
-            'INSERT INTO ' . self::TABLE . ' (user_id, question_id) VALUES (:user_id, :question_id)'
-        );
-        $statement->bindParam(':user_id', $userId, PDO::PARAM_INT);
-        $statement->bindParam(':question_id', $questionId, PDO::PARAM_INT);
 
-        // Execute the statement
+    public function insert(int $userId, int $questionId)
+    {
+            $statement = $this->pdo->prepare(
+                'INSERT INTO ' . self::TABLE . ' (user_id, question_id) VALUES (:userId, :questionId)'
+            );
+            $statement->bindParam(':userId', $userId, PDO::PARAM_INT);
+            $statement->bindParam(':questionId', $questionId, PDO::PARAM_INT);
+
         $statement->execute();
     }
 }

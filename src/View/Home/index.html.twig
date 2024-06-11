@@ -1,46 +1,57 @@
 {% extends 'layout.html.twig' %}
-
 {% block content %}
-	<div class="container">
-		<h1>Résultats de recherche pour "{{ query }}"</h1>
-		{% if results is empty %}
-			<p>Aucun résultat trouvé.</p>
-		{% else %}
 
-			<div class="row ">
-				{% for result in results %}
+<div class="container">
+    <h2>Last Questions</h2>
+    <ul>
+        {% for query in lastQuestions %}
+        <li class="row">
+            <div class="info-row">
+                            <div class='avatar-div'>
+                        <img class="avatar"></img>
+                    </div>
 
+                <div class='time'>
+                    <span class="time-label">Time:</span>
+                    <div class="time-container">
+                        <span class="time-display">18:00</span>
+                    </div>
+                </div>
 
-					<div
-						class="card" style="width: 17rem">
-						{# <hr> #}
-						<div class="card-body">
-							<h4 class="card-title">{{ result.title}}</h4>
+                <div class='capacity'>
+                    <span class="capacity-label">Capacity:</span>
+                    <div class="capacity-container">
+                        <span class="capacity-display">0/5</span>
+                    </div>
+                </div>
 
-							<p class="card-text">{{result.description }}</p>
+                <div class='participate'>
+                    <form id="participation-form" method="POST" action='/question/participate'>
+                        <input type="hidden" name="userId" value="1">
+                        <input type="hidden" name="questionId" value="{{ query.id }}">
+                        <button type="submit" class="btn-card"></button>
+                    </form>
+                </div>
 
-						</div>
-
-						{# <ul class="list-group list-group-flush"> #}
-						<form id="participation-form" class="card" method="POST" action='/participate/add'>
-							<input type="hidden" name="user_id" value="1">
-							<input type="hidden" name="question_id" value={{ result.id }}>
-
-							<button type="submit" class="btn btn-dark">Participate</button>
-						</form>
-
-						<div class="card-footer bg-transparent">
-							<span class="badge bg-dark">{{result.name }}</span>
-						</div>
-						<small>Créé le:
-							{{ result.created_at|date('d/m/Y H:i') }}</small>
-
-					</div>
-					<hr>
-				{% endfor %}
-			</div>
-
-		{% endif %}
-
-	</div>
+                 <div class='like'>
+                    <form id="like-form" method="POST" action='/question/like'>
+                        <input type="hidden" name="userId" value="1">
+                        <input type="hidden" name="questionId" value="{{ query.id }}">
+                        <button type="submit" class="btn-card"></button>
+                    </form>
+                </div>
+            </div>
+            <div class="card-question">
+                <div class="card-body">
+                    <h4 class="card-title">{{ query.title }}</h4>
+                    <p class="card-text">{{ query.description }}</p>
+                </div>
+                <div class="card-footer">
+                    <span>{{ query.name }}</span>
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}

@@ -26,6 +26,7 @@ class QuestionManager extends AbstractManager
                 ORDER BY q.created_at DESC
                 LIMIT 6
             ");
+
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
