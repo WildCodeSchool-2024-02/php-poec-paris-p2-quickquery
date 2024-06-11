@@ -1,25 +1,123 @@
 {% extends 'layout.html.twig' %}
 {% block content %}
-<div class="container">
-    <h1><a href="/">QuickQuery.com</a></h1>
-    <p><a href="/add-question">Poser une question</a></p>
+<div class="container">   
 
+    <div class="sidebar">
+        <div class="user-profile">
+            {% if session.user is defined %}          
+                <div class="avatar">
+                    <i class="bi bi-person-circle icon-large"></i>
+                    <p>Bonjour,  {{ session.user.pseudo }}</p>
+                    <p><a href="/logout">Logout</a></p> 
+                </div>
+             {% else %}
+                <a href="/register">Register</a>
+                <a href="/login">Login</a>
+             {% endif %}
+        </div>
+        <hr>
+        <div class="nav-main">
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Services</a>
+            <a href="#">Contact</a>
+        </div>
+    </div>
+
+    
     {% if msg is not empty %}
-        <div class="alert alert-success d-flex align-items-center" role="alert">           
+        <div class="alert alert-success d-flex align-items-center" role="alert">
             <i class="bi bi-check-circle-fill flex-shrink-0 me-2 mr-3" role="img" aria-label="Success:"></i>
             <div>{{ msg }}</div>
         </div>
     {% endif %}
 
-    <div class="row">
-        <form id="alert-form" class="card" method="POST" action='/add-alert'>
-            <input type="hidden" name="questionId" value="42">
-            <button type="submit" class="btn btn-dark">Alert</button>
-        </form>
-        <form id="participation-form" class="card" method="POST" action=''>
-            <input type="hidden" name="questionId" value="41">
-            <button type="submit" class="btn btn-dark">Participate</button>
-        </form>
+    <div class="main">
+    <h2 class="title">Last Questions</h2>
+
+    <div class="grid-container">
+
+        {% for lastQuestion in lastQuestions %}
+        <div class="grid-item">
+            <div class="row">
+                <div class="info-row">
+                    <div class="avatar">
+                        <i class="bi bi-person-circle icon-large"></i>
+                    </div>
+                    <span>|</span>
+                    <div class="time">
+                        <div class="time-container">
+                            <span class="time-display" data-bs-toggle="tooltip" data-bs-placement="top"
+                            data-bs-custom-class="custom-tooltip" data-bs-title="Time lauching meeting">{{ lastQuestion.scheduled_at|date("H\\hi") }}</span>
+                        </div>
+                    </div>
+                    <span>|</span>
+                    <div class="capacity">
+                        <div class="capacity-container">
+                            <span class="capacity-display" data-bs-toggle="tooltip" data-bs-placement="top"
+                            data-bs-custom-class="custom-tooltip" data-bs-title="Users subscribed">{{ lastQuestion.participant_count }}/5</span>
+                        </div>
+                    </div>
+                    <span>|</span>
+                    <div class="participate">
+                        <form id="participation-form" method="POST" action="/question/participate">
+                            <input type="hidden" name="userId" value="1">
+                            <input type="hidden" name="questionId" value="{{ lastQuestion.id }}">
+                            <button type="submit" class="btn-card">
+                                <i class="bi bi-hand-index-thumb" data-bs-toggle="tooltip" data-bs-placement="top"
+                                data-bs-custom-class="custom-tooltip" data-bs-title="To participate question"></i>
+                            </button>
+                        </form>
+
+                    </div>
+                    <span>|</span>
+                    <div class="like">
+                        <form id="like-form" method="POST" action="/question/alert">
+                            <input type="hidden" name="userId" value="1">
+                            <input type="hidden" name="questionId" value="{{ lastQuestion.id }}">
+                            <button type="submit" class="btn-card"><i class="bi bi-bell" data-bs-toggle="tooltip" data-bs-placement="top"
+                                data-bs-custom-class="custom-tooltip" data-bs-title="Be alerted on question meeting lauching"></i></button>
+                        </form>
+                    </div>
+                </div>
+                <div class="card-question">
+                    <div class="card-body">
+                        <h4 class="card-title">{{ lastQuestion.title }}</h4>
+                        <p class="card-text">
+                            "{{ lastQuestion.description|slice(0,80) }}"
+                            <button class="readmore" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="{{ lastQuestion.description }}">
+                                [...]
+                            </button>
+                        </p>
+                        <div class="card-user">
+                            <span>{{user.name}}</span>
+                        </div>
+                        <div class="card-tag">
+                            {% for tag in lastQuestion.tag_list %}
+                                <span class="badge text-bg-secondary">{{ tag }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        {% endfor %}
     </div>
+    </div><!--end of main-->
 </div>
+{% endblock %}
+{% block javascript %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
+            const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
+
+            
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        });
+
+    </script>
 {% endblock %}
