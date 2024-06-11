@@ -27,7 +27,7 @@ class QuestionController extends AbstractController
         foreach ($availableTimes as $time) {
             $date = new DateTime($time);
             $dayDifference = $date->diff(new DateTime('now', new DateTimeZone('Europe/Paris')))->days;
-    
+
             if ($dayDifference == 0) {
                 $today[] = $time;
             } elseif ($dayDifference == 1) {
@@ -87,7 +87,7 @@ class QuestionController extends AbstractController
         for ($day = 0; $day < 3; $day++) {
             $startTime = (new DateTime('09:30', $timezone))->add(new DateInterval("P{$day}D"));
             $endTime = (new DateTime('19:30', $timezone))->add(new DateInterval("P{$day}D"));
-            
+
             while ($startTime <= $endTime) {
                 if ($startTime > $currentDateTime) {
                     $times[] = $startTime->format('Y-m-d H:i:s');
