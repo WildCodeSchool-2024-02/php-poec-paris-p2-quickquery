@@ -4,7 +4,7 @@
         <div class="col-md-6">
             <input type="hidden" value="{{ question.id }}" name="id">
             <div class="form-group">
-                <input type="text" placeholder="Titre de votre question" value="{{ question.title }}" name="title" id="title" class="form-control">
+                <input name="title" type="text" placeholder="Titre de votre question" value="{{ question.title }}" id="title" class="form-control">
             </div>
             <div class="form-group">
                 <textarea name="description" placeholder="Description de votre question" id="description" rows="8" cols="50" class="form-control">{{ question.description }}</textarea>
