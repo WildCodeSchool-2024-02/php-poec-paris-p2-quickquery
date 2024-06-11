@@ -1,3 +1,26 @@
+body {
+    color: black;
+    background-color: #F9F9F9;
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow-x: hidden;
+}
+
+.container {
+    display: flex;
+    padding: 0;
+    margin: 0;
+    width: 100vw;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4rem; 
+}
+
 #form-question {
     padding: 2rem;
     background-color: white;
@@ -6,7 +29,7 @@
     background-color: #f3f3f3;
 }
 
-.w100{
+.w100 {
     width: 100% !important;
 }
 
@@ -58,7 +81,6 @@
     font-size: .9rem;
 }
 
-
 #form-question {
     padding: 2rem;
     background-color: white;
@@ -115,31 +137,6 @@
 }
 
 
-/*NAS CSS****************************************************************/
-
-
-body {
-    color: black;
-    background-color: #F9F9F9;
-    font-family: 'Inter', sans-serif;
-    margin: 0;
-    width: 100vw;
-    height: 100vh;
-    overflow-x: hidden;
-}
-
-.container {
-    display: flex;
-    padding: 0;
-    margin: 0;
-    width: 100vw;
-}
-
-.grid-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 4rem; 
-}
 .navbar .container-fluid {
     justify-content: unset;
 }
@@ -152,9 +149,7 @@ body {
 }
 
 .header a {
-
     padding: 1rem 3rem 1rem 0;
-
 }
 
 form input[type='search'] {
@@ -169,11 +164,9 @@ form input[type='search'] {
     width: 12rem;
 }
 
-
 .user-profile{
     padding: 1rem;
 }
-
 
 .askquestion {
     margin-left: 5rem;
@@ -206,9 +199,11 @@ form input[type='search'] {
 .main {
     padding: 0 5rem;
 }
+
 button.readmore {
     border: 0;
 }
+
 .popover-body {
     font-size: 1.2rem;
 }
@@ -242,10 +237,6 @@ button.readmore {
     font-size: .9rem;
     color: #555;
 }
-.custom-tooltip {
-    /* --bs-tooltip-bg: var(--bd-violet-bg);
-    --bs-tooltip-color: var(--bs-white); */
-}
 
 .btn-card {
 
@@ -260,8 +251,10 @@ button.readmore {
 }
 
 .btn:hover {
-    background-color: #555;
-}
+    background-color: #fdfcfc;
+    color: rgb(23, 74, 243);
+} 
+
 
 .badge {
     background-color: #333;

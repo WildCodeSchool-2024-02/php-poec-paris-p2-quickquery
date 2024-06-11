@@ -10,8 +10,7 @@ class QuestionManager extends AbstractManager
 
     public function selectMostRecent()
     {
-
-            $statement = $this->pdo->query("
+        $statement = $this->pdo->query("
                 SELECT q.*, 
                     COUNT(DISTINCT p.user_id) as participant_count, 
                     t.tag_list
@@ -29,39 +28,5 @@ class QuestionManager extends AbstractManager
             ");
 
         return $statement->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    public function insert(array $question): int
-    {
-        $tagManager = new TagManager();
-
-        $statement = $this->pdo->prepare(
-            "INSERT INTO " . self::TABLE . " 
-            (`title`, `description`, `scheduled_at`, `created_at`, `author`) 
-            VALUES 
-            (:title, :description, :scheduled_at, NOW(), 1)"
-        );
-        $statement->bindValue(':title', $question['title'], PDO::PARAM_STR);
-        $statement->bindValue(':description', $question['description'], PDO::PARAM_STR);
-        $statement->bindValue(':scheduled_at', $question['scheduled_at'], PDO::PARAM_STR);
-        $statement->execute();
-
-        $questionId = (int)$this->pdo->lastInsertId();
-
-        if (isset($question['tags']) && is_array($question['tags'])) {
-            foreach ($question['tags'] as $tagId) {
-                $tagManager->insert($questionId, $tagId);
-            }
-        }
-        return $questionId;
-    }
-
-    public function selectOneById(int $id): array|false
-    {
-        $statement = $this->pdo->prepare("SELECT * FROM " . self::TABLE . " WHERE id=:id");
-        $statement->bindValue('id', $id, \PDO::PARAM_INT);
-        $statement->execute();
-
-        return $statement->fetch();
     }
 }
