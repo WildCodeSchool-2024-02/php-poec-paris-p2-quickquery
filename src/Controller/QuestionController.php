@@ -26,8 +26,8 @@ class QuestionController extends AbstractController
 
         foreach ($availableTimes as $time) {
             $date = new DateTime($time);
-            $dayDifference = $date->diff(new DateTime('now', new DateTimeZone('Europe/Paris')))->days;
-
+            $dayDifference = $date->diff(new DateTime('09:30', new DateTimeZone('Europe/Paris')))->days;
+    
             if ($dayDifference == 0) {
                 $today[] = $time;
             } elseif ($dayDifference == 1) {
@@ -37,32 +37,9 @@ class QuestionController extends AbstractController
             }
         }
 
-        if ($_SERVER["REQUEST_METHOD"] === 'POST') {
-            $questionManager = new QuestionManager();
+        $errors = $this->validate();
+        $this->processPostData($errors, $question, $selectedTags);
 
-            $question = $_POST;
-
-            if (isset($_POST['title'])) {
-                $_POST['title'] = htmlentities(trim($_POST['title']), ENT_QUOTES, 'UTF-8');
-            }
-            if (isset($_POST['description'])) {
-                $_POST['description'] = htmlentities(trim($_POST['description']), ENT_QUOTES, 'UTF-8');
-            }
-
-            $errors = $this->validate($question);
-
-            $selectedTags = $question['tags'];
-
-            if (empty($errors)) {
-                $id = $questionManager->insert($question);
-
-                if (!empty($id)) {
-                    header('Location:/?question=1');
-
-                    exit();
-                }
-            }
-        }
         return $this->twig->render(
             'Question/add.html.twig',
             [
@@ -87,7 +64,7 @@ class QuestionController extends AbstractController
         for ($day = 0; $day < 3; $day++) {
             $startTime = (new DateTime('09:30', $timezone))->add(new DateInterval("P{$day}D"));
             $endTime = (new DateTime('19:30', $timezone))->add(new DateInterval("P{$day}D"));
-
+            
             while ($startTime <= $endTime) {
                 if ($startTime > $currentDateTime) {
                     $times[] = $startTime->format('Y-m-d H:i:s');
@@ -128,8 +105,40 @@ class QuestionController extends AbstractController
         } elseif (!is_array($question['tags'])) {
             $errors[] = 'Probleme de tableau array des tags';
         }
-
+        
         return $errors;
+    }
+
+    private function processPostData(array &$errors, array &$question, array &$selectedTags): void
+    {
+        if ($_SERVER["REQUEST_METHOD"] === 'POST') {
+            $questionManager = new QuestionManager();
+
+            $question = $_POST;
+
+            if (isset($_POST['title'])) {
+                $_POST['title'] = htmlentities(trim($_POST['title']), ENT_QUOTES, 'UTF-8');
+            }
+            if (isset($_POST['description'])) {
+                $_POST['description'] = htmlentities(trim($_POST['description']), ENT_QUOTES, 'UTF-8');
+            }
+
+            $errors = $this->validate($_POST);
+
+            $selectedTags = $question['tags']?? [];
+
+            if (empty($errors)) {
+                $id = $questionManager->insert($question);
+    
+                if (!empty($id)) {
+                    header('Location:/?question=1');
+    
+                    exit();
+                }
+            }
+
+        }
+
     }
 
     public function participate(): string
