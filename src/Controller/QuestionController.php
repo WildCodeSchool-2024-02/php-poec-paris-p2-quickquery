@@ -27,7 +27,6 @@ class QuestionController extends AbstractController
         foreach ($availableTimes as $time) {
             $date = new DateTime($time);
             $dayDifference = $date->diff(new DateTime('09:30', new DateTimeZone('Europe/Paris')))->days;
-    
             if ($dayDifference == 0) {
                 $today[] = $time;
             } elseif ($dayDifference == 1) {
@@ -37,7 +36,8 @@ class QuestionController extends AbstractController
             }
         }
 
-        $errors = $this->validate();
+        $errors = $this->validate($question);
+
         $this->processPostData($errors, $question, $selectedTags);
 
         return $this->twig->render(
@@ -105,7 +105,7 @@ class QuestionController extends AbstractController
         } elseif (!is_array($question['tags'])) {
             $errors[] = 'Probleme de tableau array des tags';
         }
-        
+
         return $errors;
     }
 
@@ -125,20 +125,18 @@ class QuestionController extends AbstractController
 
             $errors = $this->validate($_POST);
 
-            $selectedTags = $question['tags']?? [];
+            $selectedTags = $question['tags'] ?? [];
 
             if (empty($errors)) {
                 $id = $questionManager->insert($question);
-    
+
                 if (!empty($id)) {
                     header('Location:/?question=1');
-    
+
                     exit();
                 }
             }
-
         }
-
     }
 
     public function participate(): string
