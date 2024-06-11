@@ -11,13 +11,38 @@
             </div>
         </div>
         <div class="col-md-6 d-flex flex-column justify-content-between">
+            {% set today = "now"|date("d/m") %}
+            {% set tomorrow = "now +1 day"|date("d/m") %}
+            {% set afterTomorrow = "now +2 days"|date("d/m") %}
 
             <div class="form-group">
-                <label for="scheduled_at">Heure du meeting</label>
+                <label for="scheduled_at">Heure du meeting aujourd'hui {{today}}</label>
                 <select id="scheduled_at" name="scheduled_at" class="form-control">
-                    {% for time in availableTimes %}
+                    {% for time in todayTimes %}
                         <option value="{{ time }}" {% if time == question.scheduled_at or time == current_time %}selected{% endif %}>
-                            {{ time }}
+                            {{ time|date('H:i') }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="button" id="toggleDayButton" class="btn btn-link">Link</button>
+
+            <div id="tomorrow" class="form-group"  style="display: none;">
+                <label for="scheduled_at">Heure du meeting {{tomorrow}}</label>
+                <select id="scheduled_at" name="scheduled_at" class="form-control">
+                    {% for time in tomorrowTimes %}
+                        <option value="{{ time }}" {% if time == question.scheduled_at or time == current_time %}selected{% endif %}>
+                            {{ time|date('H:i') }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div id="afterTomorrow" class="form-group"  style="display: none;">
+                <label for="scheduled_at">Heure du meeting {{afterTomorrow}}</label>
+                <select id="scheduled_at" name="scheduled_at" class="form-control">
+                {% for time in afterTomorrowTimes %}
+                        <option value="{{ time }}" {% if time == question.scheduled_at or time == current_time %}selected{% endif %}>
+                            {{ time|date('H:i') }}
                         </option>
                     {% endfor %}
                 </select>

@@ -1,21 +1,28 @@
-<!doctype html>
-<html lang="fr">
+<!DOCTYPE html>
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="/assets/images/favicon.png">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <title>{% block title %}QuickQuey{% endblock %}</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="/assets/css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-  
-    <title>{% block title %}{% endblock %}</title>
-    
-    {% block stylesheet %}{% endblock %}
-
 </head>
 <body>
+    <div class="header">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+        <a class="active" href="/"><img src="/assets/images/quickquery_logo_3.png" id="logo" class="logo" alt="logo"></a>
+        <a href="#about">About</a>
+        
+        <a {% if session.user is defined%} 
+        href="question/add"
+        {% else %} 
+        href="login"
+        {% endif %}>Questions</a>
+        <a href="#contact">Contact</a>
+    </div>
+
+    <div class="sidebar">
         {% if session.user is defined %}
             <article>
                 <div class="avatar">
@@ -28,9 +35,16 @@
             <p><a href="/register">S'inscrire</a></p>
             <p><a href="/login">Connexion</a></p>
         {% endif %}
-    {% block content %}{% endblock %}
+        <a href="#section1">Section 1</a>
+        <a href="#section2">Section 2</a>
+        <a href="#section3">Section 3</a>
+        <a href="#section4">Section 4</a>
+    </div>
+
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
     {% block javascript %}{% endblock %}
+
 </body>
 </html>
-
-

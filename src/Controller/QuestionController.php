@@ -20,9 +20,25 @@ class QuestionController extends AbstractController
         $tagManager = new TagManager();
         $tags = $tagManager->selectAll();
         $availableTimes = $this->getAvailableTimes();
+        $today = [];
+        $tomorrow = [];
+        $afterTomorrow = [];
+
+        foreach ($availableTimes as $time) {
+            $date = new DateTime($time);
+            $dayDifference = $date->diff(new DateTime('now', new DateTimeZone('Europe/Paris')))->days;
+    
+            if ($dayDifference == 0) {
+                $today[] = $time;
+            } elseif ($dayDifference == 1) {
+                $tomorrow[] = $time;
+            } elseif ($dayDifference == 2) {
+                $afterTomorrow[] = $time;
+            }
+        }
 
         if ($_SERVER["REQUEST_METHOD"] === 'POST') {
-            $questionManager = new questionManager();
+            $questionManager = new QuestionManager();
 
             $question = $_POST;
 
@@ -54,8 +70,9 @@ class QuestionController extends AbstractController
                 'tags' => $tags,
                 'selectedTags' => $selectedTags,
                 'question' => $question,
-                'availableTimes' => $availableTimes,
-
+                'todayTimes' => $today,
+                'tomorrowTimes' => $tomorrow,
+                'afterTomorrowTimes' => $afterTomorrow,
             ]
         );
     }
@@ -65,19 +82,18 @@ class QuestionController extends AbstractController
         $times = [];
         $timezone = new DateTimeZone('Europe/Paris');
         $currentDateTime = new DateTime('now', $timezone);
-        $startTime = new DateTime('09:30', $timezone);
-        $endTime = new DateTime('19:30', $timezone);
-        $interval = new DateInterval('PT30M');
+        $interval = new DateInterval('PT1H');
 
-        $cutoffTime = new DateTime('19:30', $timezone);
-
-        if ($currentDateTime > $cutoffTime) {
-            $startTime->add(new DateInterval('P1D'));
-            $endTime->add(new DateInterval('P1D'));
-        }
-        while ($startTime <= $endTime) {
-            $times[] = $startTime->format('Y-m-d H:i:s');
-            $startTime->add($interval);
+        for ($day = 0; $day < 3; $day++) {
+            $startTime = (new DateTime('09:30', $timezone))->add(new DateInterval("P{$day}D"));
+            $endTime = (new DateTime('19:30', $timezone))->add(new DateInterval("P{$day}D"));
+            
+            while ($startTime <= $endTime) {
+                if ($startTime > $currentDateTime) {
+                    $times[] = $startTime->format('Y-m-d H:i:s');
+                }
+                $startTime->add($interval);
+            }
         }
         return $times;
     }
@@ -116,9 +132,24 @@ class QuestionController extends AbstractController
         return $errors;
     }
 
+    public function participate(): string
+    {
+        if ($_SERVER["REQUEST_METHOD"] === 'POST') {
+            $participantManager = new ParticipantManager();
+            if (isset($_POST['questionId'])) {
+                $userId = 1;
+                $questionId = (int)$_POST['questionId'];
+
+                $participantManager->insert($userId, $questionId);
+            }
+        }
+
+        return $this->twig->render('Home/index.html.twig', [
+        ]);
+    }
+
     public function alert(): void
     {
-
         $questionId = htmlentities(trim($_POST['questionId']));
 
         $userId = 2;
