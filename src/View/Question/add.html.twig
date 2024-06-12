@@ -13,7 +13,6 @@
             </div>
             {% endfor %}
         {% endif %}
-
         {% include 'Question/_form.html.twig' %}
     </div>
 {% endblock %}
@@ -22,22 +21,83 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        var toggleButton = document.getElementById('toggleDayButton');
-        var dropdown = document.getElementById("tomorrow");
+        var toggleButton = document.getElementById('toggleTagsButton');
+        var tagsSelect = document.getElementById('tagsSelect');
+        var dropdown = document.getElementById('tagsDropdown');
+        var selectedTagsDisplay = document.getElementById('selectedTagsDisplay');
+        
+        var toggleButton1 = document.getElementById('toggleDayButton');
+        var dropdown1 = document.getElementById("tomorrow");
         var dropdown2 = document.getElementById("afterTomorrow");
 
-        if (toggleButton) {
-                toggleButton.addEventListener('click', function() {
-                if (dropdown.style.display === 'none' && dropdown2.style.display === 'none') {
-                    dropdown.style.display = 'block';
+        if (toggleButton1) {
+                toggleButton1.addEventListener('click', function() {
+                if (dropdown1.style.display === 'none' && dropdown2.style.display === 'none') {
+                    dropdown1.style.display = 'block';
                     dropdown2.style.display = 'block';
                 } else {
-                    dropdown.style.display = 'none';
+                    dropdown1.style.display = 'none';
                     dropdown2.style.display = 'none';
                 }
             });
          }
+
+        if (toggleButton) {
+            toggleButton.addEventListener('click', function() {
+                if (dropdown.style.display === 'none') {
+                    dropdown.style.display = 'block';
+                    this.textContent = 'Ajouter !';
+                } else {
+                    dropdown.style.display = 'none';
+                    this.textContent = 'Selectionner des tags';
+                }
+            });
+        }
+
+        function updateSelectedTagsDisplay() {
+            var selectedOptions = Array.from(tagsSelect.selectedOptions);
+            selectedTagsDisplay.innerHTML = ''; 
+
+            selectedOptions.forEach(option => {
+                var tagItem = document.createElement('span');
+                tagItem.className = 'tag-item';
+                tagItem.textContent = option.textContent;
+
+                var removeButton = document.createElement('span');
+                removeButton.className = 'remove-tag';
+                removeButton.innerHTML = '<i class="bi bi-x flex-shrink-0 me-2" role="img" aria-label="Remove"></i>';
+
+                removeButton.addEventListener('click', function() {
+                    option.selected = false;
+                    updateSelectedTagsDisplay();
+                });
+
+                tagItem.appendChild(removeButton);
+                selectedTagsDisplay.appendChild(tagItem);
+            });
+        }
+
+        if (tagsSelect) {
+            tagsSelect.addEventListener('change', updateSelectedTagsDisplay);
+
+            updateSelectedTagsDisplay();
+        }
     });
+
+    function handleSelectChange(event) {
+        // Supprimez le nom de tous les sélecteurs
+        document.querySelectorAll('.scheduled_at').forEach(function(select) {
+            select.removeAttribute('name');
+        });
+        // Ajoutez le nom au sélecteur sélectionné
+        event.target.setAttribute('name', 'scheduled_at');
+    }
+
+    // Ajoutez un écouteur d'événement à chaque sélecteur
+    document.querySelectorAll('.scheduled_at').forEach(function(select) {
+        select.addEventListener('change', handleSelectChange);
+    });
+
 </script>
 
 {% endblock %}

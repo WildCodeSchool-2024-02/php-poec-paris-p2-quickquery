@@ -10,11 +10,27 @@ class QuestionManager extends AbstractManager
 
     public function selectMostRecent()
     {
-        $statement = $this->pdo->query("SELECT * FROM " . self::TABLE . " ORDER BY created_at DESC LIMIT 5");
+            $statement = $this->pdo->query("
+                SELECT q.*, 
+                    COUNT(DISTINCT p.user_id) as participant_count, 
+                    t.tag_list
+                FROM " . self::TABLE . " AS q
+                LEFT JOIN participant AS p ON q.id = p.question_id
+                LEFT JOIN (
+                    SELECT qt.question_id, GROUP_CONCAT(t.name SEPARATOR ', ') as tag_list
+                    FROM question_tag AS qt
+                    LEFT JOIN tag AS t ON qt.tag_id = t.id
+                    GROUP BY qt.question_id
+                ) AS t ON q.id = t.question_id
+                GROUP BY q.id
+                ORDER BY q.created_at DESC
+                LIMIT 6
+            ");
+
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function insert(array $question): int
+    public function insert(array $question, int $authorId): int
     {
         $tagManager = new TagManager();
 
@@ -22,11 +38,12 @@ class QuestionManager extends AbstractManager
             "INSERT INTO " . self::TABLE . " 
             (`title`, `description`, `scheduled_at`, `created_at`, `author`) 
             VALUES 
-            (:title, :description, :scheduled_at, NOW(), 1)"
+            (:title, :description, :scheduled_at, NOW(), :author)"
         );
         $statement->bindValue(':title', $question['title'], PDO::PARAM_STR);
         $statement->bindValue(':description', $question['description'], PDO::PARAM_STR);
         $statement->bindValue(':scheduled_at', $question['scheduled_at'], PDO::PARAM_STR);
+        $statement->bindValue(':author', $authorId, PDO::PARAM_INT);
         $statement->execute();
 
         $questionId = (int)$this->pdo->lastInsertId();

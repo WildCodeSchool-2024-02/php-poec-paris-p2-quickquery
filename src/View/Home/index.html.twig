@@ -25,8 +25,8 @@
                 </div>
 
                 <div class='participate'>
-                    <form id="participation-form" method="POST" {% if session.user is defined%} action='/question/participate' {% else %} action='/login' {% endif %}>
-                        {% if session.user is defined%}
+                    <form id="participation-form" method="POST" {% if user %} action='/question/participate' {% else %} action='/login' {% endif %}>
+                        {% if user %}
                         <input type="hidden" name="userId" value="1">
                         <input type="hidden" name="questionId" value="{{ query.id }}">
                         {% endif %}
@@ -35,13 +35,8 @@
                 </div>
 
                  <div class='like'>
-                    <form id="like-form" method="POST"
-                        {% if session.user is defined%}
-                        action='/question/alert'
-                        {% else %} 
-                        action='/login'
-                        {% endif %}>
-                        {% if session.user is defined%}
+                    <form id="like-form" method="POST" {% if user %} action='/question/alert' {% else %} action='/login' {% endif %}>
+                        {% if user %}
                         <input type="hidden" name="userId" value="1">
                         <input type="hidden" name="questionId" value="{{ query.id }}">
                         {% endif %}

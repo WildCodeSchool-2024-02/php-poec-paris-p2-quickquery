@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}QuickQuey{% endblock %}</title>
+    <title>{% block title %}QuickQuery{% endblock %}</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="/assets/css/style.css">
@@ -14,7 +15,7 @@
         <a class="active" href="/"><img src="/assets/images/quickquery_logo_3.png" id="logo" class="logo" alt="logo"></a>
         <a href="#about">About</a>
         
-        <a {% if session.user is defined%} 
+        <a {% if user %} 
         href="question/add"
         {% else %} 
         href="login"
@@ -23,13 +24,13 @@
     </div>
 
     <div class="sidebar">
-        {% if session.user is defined %}
+        {% if user %}
             <article>
                 <div class="avatar">
                     <i class="bi bi-person-circle icon-large"></i>
                 </div>
-                <p>Bonjour,  {{ session.user.pseudo }}  !</p>
-                <p><a href="/">Déconnexion</a></p> 
+                <p>Bonjour,  {{ user.pseudo }} !</p>
+                <p><a href= "logout">Déconnexion</a></p> 
             </article>
         {% else %}
             <p><a href="/register">S'inscrire</a></p>

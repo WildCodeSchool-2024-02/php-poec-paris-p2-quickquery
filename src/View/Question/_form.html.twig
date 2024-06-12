@@ -17,9 +17,12 @@
 
             <div class="form-group">
                 <label for="scheduled_at">Heure du meeting aujourd'hui {{today}}</label>
-                <select id="scheduled_at" name="scheduled_at" class="form-control">
+                <select id="scheduled_at" class="form-control scheduled_at">
+                    <option value="">
+                        Sélection
+                    </option>
                     {% for time in todayTimes %}
-                        <option value="{{ time }}" {% if time == question.scheduled_at or time == current_time %}selected{% endif %}>
+                        <option value="{{ time }}">
                             {{ time|date('H:i') }}
                         </option>
                     {% endfor %}
@@ -28,20 +31,26 @@
             <button type="button" id="toggleDayButton" class="btn btn-link">Link</button>
 
             <div id="tomorrow" class="form-group"  style="display: none;">
-                <label for="scheduled_at">Heure du meeting {{tomorrow}}</label>
-                <select id="scheduled_at" name="scheduled_at" class="form-control">
+                <label for="scheduled_at_tomorrow">Heure du meeting {{tomorrow}}</label>
+                <select id="scheduled_at_tomorrow" class="form-control scheduled_at">
+                        <option value="">
+                        Sélection
+                        </option>
                     {% for time in tomorrowTimes %}
-                        <option value="{{ time }}" {% if time == question.scheduled_at or time == current_time %}selected{% endif %}>
+                        <option value="{{ time }}">
                             {{ time|date('H:i') }}
                         </option>
                     {% endfor %}
                 </select>
             </div>
             <div id="afterTomorrow" class="form-group"  style="display: none;">
-                <label for="scheduled_at">Heure du meeting {{afterTomorrow}}</label>
-                <select id="scheduled_at" name="scheduled_at" class="form-control">
+                <label for="scheduled_at_afterTomorrow">Heure du meeting {{afterTomorrow}}</label>
+                <select id="scheduled_at_afterTomorrow" class="form-control scheduled_at">
+                        <option value="">
+                        Sélection
+                        </option>
                 {% for time in afterTomorrowTimes %}
-                        <option value="{{ time }}" {% if time == question.scheduled_at or time == current_time %}selected{% endif %}>
+                        <option value="{{ time }}">
                             {{ time|date('H:i') }}
                         </option>
                     {% endfor %}

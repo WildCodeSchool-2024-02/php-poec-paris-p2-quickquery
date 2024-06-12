@@ -7,51 +7,73 @@ use DateTimeZone;
 use DateInterval;
 use App\Model\QuestionManager;
 use App\Model\ParticipantManager;
+use App\Model\UserManager;
 use App\Model\TagManager;
 use App\Model\AlertManager;
 
 class QuestionController extends AbstractController
 {
-    public function add(): string
+    public function add()
     {
+
+        
         $errors = [];
         $question = [];
         $selectedTags = [];
+        $userManager = new UserManager();
         $tagManager = new TagManager();
         $tags = $tagManager->selectAll();
         $availableTimes = $this->getAvailableTimes();
-        $today = [];
-        $tomorrow = [];
-        $afterTomorrow = [];
+        $todayTimes = [];
+        $tomorrowTimes = [];
+        $afterTomorrowTimes = [];
 
-        foreach ($availableTimes as $time) {
-            $date = new DateTime($time);
-            $dayDifference = $date->diff(new DateTime('09:30', new DateTimeZone('Europe/Paris')))->days;
-            if ($dayDifference == 0) {
-                $today[] = $time;
-            } elseif ($dayDifference == 1) {
-                $tomorrow[] = $time;
-            } elseif ($dayDifference == 2) {
-                $afterTomorrow[] = $time;
+
+        if (isset($_SESSION['id']) ){
+
+            foreach ($availableTimes as $time) {
+                $date = new DateTime($time);
+            $timezone = new DateTimeZone('Europe/Paris');
+            $currentDate = new DateTime('now', $timezone);
+            $currentDate->setTime(0, 0);
+
+            $todayDate = clone $currentDate;
+            $tomorrowDate = (clone $currentDate)->modify('+1 day');
+            $afterTomorrowDate = (clone $currentDate)->modify('+2 days');
+
+            if ($date->format('Y-m-d') == $todayDate->format('Y-m-d')) {
+                $todayTimes[] = $time;
+            } elseif ($date->format('Y-m-d') == $tomorrowDate->format('Y-m-d')) {
+                $tomorrowTimes[] = $time;
+            } elseif ($date->format('Y-m-d') == $afterTomorrowDate->format('Y-m-d')) {
+                $afterTomorrowTimes[] = $time;
             }
         }
+    
+            $errors = $this->validate($question);
+            $user = $userManager->selectOneById($_SESSION['id']);
 
-        $errors = $this->validate($question);
+            $this->processPostData($errors, $question, $selectedTags);
+    
+            return $this->twig->render(
+                'Question/add.html.twig',
+                [
+                    'errors' => $errors,
+                    'tags' => $tags,
+                    'selectedTags' => $selectedTags,
+                    'question' => $question,
+                    'todayTimes' => $todayTimes,
+                    'tomorrowTimes' => $tomorrowTimes,
+                    'afterTomorrowTimes' => $afterTomorrowTimes,
+                    'user' => $user,
 
-        $this->processPostData($errors, $question, $selectedTags);
+                ]
+            );
 
-        return $this->twig->render(
-            'Question/add.html.twig',
-            [
-                'errors' => $errors,
-                'tags' => $tags,
-                'selectedTags' => $selectedTags,
-                'question' => $question,
-                'todayTimes' => $today,
-                'tomorrowTimes' => $tomorrow,
-                'afterTomorrowTimes' => $afterTomorrow,
-            ]
-        );
+        } else{
+            header("Location: /login");
+        }
+        
     }
 
     private function getAvailableTimes(): array
@@ -64,7 +86,7 @@ class QuestionController extends AbstractController
         for ($day = 0; $day < 3; $day++) {
             $startTime = (new DateTime('09:30', $timezone))->add(new DateInterval("P{$day}D"));
             $endTime = (new DateTime('19:30', $timezone))->add(new DateInterval("P{$day}D"));
-            
+
             while ($startTime <= $endTime) {
                 if ($startTime > $currentDateTime) {
                     $times[] = $startTime->format('Y-m-d H:i:s');
@@ -122,16 +144,20 @@ class QuestionController extends AbstractController
             if (isset($_POST['description'])) {
                 $_POST['description'] = htmlentities(trim($_POST['description']), ENT_QUOTES, 'UTF-8');
             }
+            if (isset($_POST['scheduled_at'])) {
+                $_POST['scheduled_at'] = htmlentities(trim($_POST['scheduled_at']), ENT_QUOTES, 'UTF-8');
+            }
 
             $errors = $this->validate($_POST);
 
             $selectedTags = $question['tags'] ?? [];
+            $authorId = $_SESSION['id'];
 
             if (empty($errors)) {
-                $id = $questionManager->insert($question);
+                $id = $questionManager->insert($question, $authorId);
 
                 if (!empty($id)) {
-                    header('Location:/?question=1');
+                    header('Location:/?question');
 
                     exit();
                 }

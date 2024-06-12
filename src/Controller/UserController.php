@@ -53,15 +53,10 @@ class UserController extends AbstractController
 
             if (empty($errors)) {
                 $user = $userManager->getByEmail($email);
-                $_SESSION['user'] = $user ;
-
-                return $this->twig->render(
-                    'Home/index.html.twig',
-                    [
-                        'session' => $_SESSION,
-                        'user' => $user,
-                    ]
-                );
+                $_SESSION['id'] = $user['id'] ;
+                
+                header('Location: /');
+                exit;
             }
         }
 
@@ -69,7 +64,6 @@ class UserController extends AbstractController
             'User/login.html.twig',
             [
                'errors' => $errors,
-
             ]
         );
     }
