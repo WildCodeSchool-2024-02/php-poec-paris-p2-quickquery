@@ -14,7 +14,7 @@
             {% endfor %}
         {% endif %}
         {% include 'Question/_form.html.twig' %}
-    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 {% endblock %}
 
 {% block javascript %}
@@ -25,22 +25,6 @@
         var tagsSelect = document.getElementById('tagsSelect');
         var dropdown = document.getElementById('tagsDropdown');
         var selectedTagsDisplay = document.getElementById('selectedTagsDisplay');
-        
-        var toggleButton1 = document.getElementById('toggleDayButton');
-        var dropdown1 = document.getElementById("tomorrow");
-        var dropdown2 = document.getElementById("afterTomorrow");
-
-        if (toggleButton1) {
-                toggleButton1.addEventListener('click', function() {
-                if (dropdown1.style.display === 'none' && dropdown2.style.display === 'none') {
-                    dropdown1.style.display = 'block';
-                    dropdown2.style.display = 'block';
-                } else {
-                    dropdown1.style.display = 'none';
-                    dropdown2.style.display = 'none';
-                }
-            });
-         }
 
         if (toggleButton) {
             toggleButton.addEventListener('click', function() {
@@ -83,21 +67,6 @@
             updateSelectedTagsDisplay();
         }
     });
-
-    function handleSelectChange(event) {
-        // Supprimez le nom de tous les sélecteurs
-        document.querySelectorAll('.scheduled_at').forEach(function(select) {
-            select.removeAttribute('name');
-        });
-        // Ajoutez le nom au sélecteur sélectionné
-        event.target.setAttribute('name', 'scheduled_at');
-    }
-
-    // Ajoutez un écouteur d'événement à chaque sélecteur
-    document.querySelectorAll('.scheduled_at').forEach(function(select) {
-        select.addEventListener('change', handleSelectChange);
-    });
-
 </script>
 
 {% endblock %}

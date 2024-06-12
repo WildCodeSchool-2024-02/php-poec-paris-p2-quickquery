@@ -3,62 +3,67 @@
     <div class="row card-body">
         <div class="col-md-6">
             <input type="hidden" value="{{ question.id }}" name="id">
-            <div class="form-group">
+            <div class="form-group m-3">
                 <input name="title" type="text" placeholder="Titre de votre question" value="{{ question.title }}" id="title" class="form-control">
             </div>
-            <div class="form-group">
+            <div class="form-group m-3">
                 <textarea name="description" placeholder="Description de votre question" id="description" rows="8" cols="50" class="form-control">{{ question.description }}</textarea>
             </div>
         </div>
         <div class="col-md-6 d-flex flex-column justify-content-between">
-            {% set today = "now"|date("d/m") %}
-            {% set tomorrow = "now +1 day"|date("d/m") %}
-            {% set afterTomorrow = "now +2 days"|date("d/m") %}
+
+            <button type="button" class="btn btn-secondary mb-3" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                Heure du meeting
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Heure du meeting</h1>
+                        </div>
+                        <div class="modal-body row-cols-3 d-flex m-3">
+                            {% set today = "now"|date("d/m") %}
+                            {% set tomorrow = "now +1 day"|date("d/m") %}
+                            {% set afterTomorrow = "now +2 days"|date("d/m") %}
+                            <div class="col">
+                                <h4> Ajourd'hui {{today}} </h4>
+                                <div class=" d-flex flex-column justify-content-center">
+                                    {% for time in todayTimes %}
+                                        <input type="radio" class="btn-check" id="time_{{ loop.index }}" value="{{ time }}" name="scheduled_at">
+                                        <label for="time_{{ loop.index }}" class="btn btn-outline-dark m-2">{{ time|date('H:i') }}</label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h4> Demain {{tomorrow}} </h4>
+                                <div class=" d-flex flex-column justify-content-center">
+                                    {% for time in tomorrowTimes %}
+                                        <input type="radio" class="btn-check" id="tomorrow_time_{{ loop.index }}" value="{{ time }}" name="scheduled_at">
+                                        <label for="tomorrow_time_{{ loop.index }}" class="btn btn-outline-dark m-2">{{time|date('H:i')}}</label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h4> {{afterTomorrow}} </h4>
+                                <div class=" d-flex flex-column justify-content-center">
+                                    {% for time in afterTomorrowTimes %}
+                                        <input type="radio" class="btn-check" id="after_tomorrow_time_{{ loop.index }}" value="{{ time }}" name="scheduled_at">
+                                        <label for="after_tomorrow_time_{{ loop.index }}" class="btn btn-outline-dark m-2">{{time|date('H:i')}}</label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Valider</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="form-group">
-                <label for="scheduled_at">Heure du meeting aujourd'hui {{today}}</label>
-                <select id="scheduled_at" class="form-control scheduled_at">
-                    <option value="">
-                        Sélection
-                    </option>
-                    {% for time in todayTimes %}
-                        <option value="{{ time }}">
-                            {{ time|date('H:i') }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-            <button type="button" id="toggleDayButton" class="btn btn-link">Link</button>
-
-            <div id="tomorrow" class="form-group"  style="display: none;">
-                <label for="scheduled_at_tomorrow">Heure du meeting {{tomorrow}}</label>
-                <select id="scheduled_at_tomorrow" class="form-control scheduled_at">
-                        <option value="">
-                        Sélection
-                        </option>
-                    {% for time in tomorrowTimes %}
-                        <option value="{{ time }}">
-                            {{ time|date('H:i') }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div id="afterTomorrow" class="form-group"  style="display: none;">
-                <label for="scheduled_at_afterTomorrow">Heure du meeting {{afterTomorrow}}</label>
-                <select id="scheduled_at_afterTomorrow" class="form-control scheduled_at">
-                        <option value="">
-                        Sélection
-                        </option>
-                {% for time in afterTomorrowTimes %}
-                        <option value="{{ time }}">
-                            {{ time|date('H:i') }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="form-group">
-                <button type="button" id="toggleTagsButton" class="btn btn-secondary">Choisir des tags </button>
+                <button type="button" id="toggleTagsButton" class="btn btn-secondary mb-3">Choisir des tags </button>
                 <span class="icon-circle" id="helpBtTags">
                     <i class="bi bi-info flex-shrink-0 me-2" role="img" aria-label="Info"></i>
                 </span>
