@@ -25,17 +25,21 @@
                 </div>
 
                 <div class='participate'>
-                    <form id="participation-form" method="POST" action='/question/participate'>
+                    <form id="participation-form" method="POST" {% if user %} action='/question/participate' {% else %} action='/login' {% endif %}>
+                        {% if user %}
                         <input type="hidden" name="userId" value="1">
                         <input type="hidden" name="questionId" value="{{ query.id }}">
+                        {% endif %}
                         <button type="submit" class="btn-card"></button>
                     </form>
                 </div>
 
                  <div class='like'>
-                    <form id="like-form" method="POST" action='/question/like'>
+                    <form id="like-form" method="POST" {% if user %} action='/question/alert' {% else %} action='/login' {% endif %}>
+                        {% if user %}
                         <input type="hidden" name="userId" value="1">
                         <input type="hidden" name="questionId" value="{{ query.id }}">
+                        {% endif %}
                         <button type="submit" class="btn-card"></button>
                     </form>
                 </div>

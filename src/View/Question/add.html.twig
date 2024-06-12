@@ -13,21 +13,17 @@
             </div>
             {% endfor %}
         {% endif %}
-
         {% include 'Question/_form.html.twig' %}
-    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 {% endblock %}
 
 {% block javascript %}
 
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var toggleButton = document.getElementById('toggleTagsButton');
-        var helpBtTags = document.getElementById('helpBtTags');
-        var layerHelpMsg = document.getElementById('layerHelpMsg'); 
-        var dropdown = document.getElementById('tagsDropdown');
         var tagsSelect = document.getElementById('tagsSelect');
+        var dropdown = document.getElementById('tagsDropdown');
         var selectedTagsDisplay = document.getElementById('selectedTagsDisplay');
 
         if (toggleButton) {
@@ -42,19 +38,10 @@
             });
         }
 
-        if(helpBtTags){
-            helpBtTags.addEventListener('mouseover', function() {
-                layerHelpMsg.classList.remove('d-none');
-            });
-
-            helpBtTags.addEventListener('mouseout', function() {
-                layerHelpMsg.classList.add('d-none');
-            });
-        }
-
         function updateSelectedTagsDisplay() {
             var selectedOptions = Array.from(tagsSelect.selectedOptions);
-            selectedTagsDisplay.innerHTML = '';
+            selectedTagsDisplay.innerHTML = ''; 
+
             selectedOptions.forEach(option => {
                 var tagItem = document.createElement('span');
                 tagItem.className = 'tag-item';
@@ -76,6 +63,7 @@
 
         if (tagsSelect) {
             tagsSelect.addEventListener('change', updateSelectedTagsDisplay);
+
             updateSelectedTagsDisplay();
         }
     });

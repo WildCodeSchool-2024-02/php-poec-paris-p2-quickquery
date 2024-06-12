@@ -1,0 +1,23 @@
+<form method="post" id="form-inscription" class="card">
+    <div class="row card-body">
+        <div class="col-md-6">
+            <input type="hidden" value="{{ inscription.id }}" name="id">
+            <div class="form-group">
+                <input type="text" placeholder="Pseudo" value="{{ inscription.pseudo }}" name="pseudo" id="pseudo" class="form-control">
+            </div>
+            <div class="form-group">
+                <input type="email" placeholder="Email" value="{{ inscription.email }}" name="email" id="email" class="form-control">
+            </div>
+            <div class="form-group">
+                <input type="password" placeholder="Password" value="{{ inscription.email }}" name="password" id="password" class="form-control">
+            </div>
+        </div>
+
+            <div id="selectedTagsDisplay" class="form-group"></div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-outline-dark btn-lg w100"> s'inscrire </button>
+            </div>
+    </div>
+
+</form>
+
