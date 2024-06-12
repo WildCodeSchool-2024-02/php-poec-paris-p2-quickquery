@@ -54,7 +54,6 @@ class UserController extends AbstractController
             if (empty($errors)) {
                 $user = $userManager->getByEmail($email);
                 $_SESSION['id'] = $user['id'] ;
-                
                 header('Location: /');
                 exit;
             }
