@@ -19,11 +19,13 @@ class DashboardController extends AbstractController
             $userManager = new UserManager();
             $user = $userManager->selectOneById($_SESSION['id']);
         }
-
-        return $this->twig->render('Home/index.html.twig', 
-        [
-            'lastQuestions' => $lastQuestions,
-            'user' => $user,
-        ]);
+        
+        return $this->twig->render(
+            'Home/index.html.twig',
+            [
+                'lastQuestions' => $lastQuestions,
+                'user' => $user,
+            ]
+        );
     }
 }

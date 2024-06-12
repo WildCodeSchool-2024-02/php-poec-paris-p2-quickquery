@@ -16,7 +16,6 @@ class QuestionController extends AbstractController
     public function add()
     {
 
-        
         $errors = [];
         $question = [];
         $selectedTags = [];
@@ -29,32 +28,34 @@ class QuestionController extends AbstractController
         $afterTomorrowTimes = [];
 
 
-        if (isset($_SESSION['id']) ){
+        if (isset($_SESSION['id'])) {
 
             foreach ($availableTimes as $time) {
+
                 $date = new DateTime($time);
-            $timezone = new DateTimeZone('Europe/Paris');
-            $currentDate = new DateTime('now', $timezone);
-            $currentDate->setTime(0, 0);
+                $timezone = new DateTimeZone('Europe/Paris');
+                $currentDate = new DateTime('now', $timezone);
+                $currentDate->setTime(0, 0);
 
-            $todayDate = clone $currentDate;
-            $tomorrowDate = (clone $currentDate)->modify('+1 day');
-            $afterTomorrowDate = (clone $currentDate)->modify('+2 days');
+                $todayDate = clone $currentDate;
+                $tomorrowDate = (clone $currentDate)->modify('+1 day');
+                $afterTomorrowDate = (clone $currentDate)->modify('+2 days');
 
-            if ($date->format('Y-m-d') == $todayDate->format('Y-m-d')) {
-                $todayTimes[] = $time;
-            } elseif ($date->format('Y-m-d') == $tomorrowDate->format('Y-m-d')) {
-                $tomorrowTimes[] = $time;
-            } elseif ($date->format('Y-m-d') == $afterTomorrowDate->format('Y-m-d')) {
-                $afterTomorrowTimes[] = $time;
+                if ($date->format('Y-m-d') == $todayDate->format('Y-m-d')) {
+                    $todayTimes[] = $time;
+                } elseif ($date->format('Y-m-d') == $tomorrowDate->format('Y-m-d')) {
+                    $tomorrowTimes[] = $time;
+                } elseif ($date->format('Y-m-d') == $afterTomorrowDate->format('Y-m-d')) {
+                    $afterTomorrowTimes[] = $time;
+                }
             }
-        }
-    
+            
+
             $errors = $this->validate($question);
             $user = $userManager->selectOneById($_SESSION['id']);
 
             $this->processPostData($errors, $question, $selectedTags);
-    
+
             return $this->twig->render(
                 'Question/add.html.twig',
                 [
@@ -69,11 +70,11 @@ class QuestionController extends AbstractController
 
                 ]
             );
-
-        } else{
+            
+        } else {
             header("Location: /login");
         }
-        
+
     }
 
     private function getAvailableTimes(): array

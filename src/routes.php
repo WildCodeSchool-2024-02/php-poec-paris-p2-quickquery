@@ -9,4 +9,3 @@ return [
     'login' => ['UserController', 'login',],
     'logout' => ['UserController', 'logout',],
 ];
-    
