@@ -27,11 +27,8 @@ class QuestionController extends AbstractController
         $tomorrowTimes = [];
         $afterTomorrowTimes = [];
 
-
         if (isset($_SESSION['id'])) {
-
             foreach ($availableTimes as $time) {
-
                 $date = new DateTime($time);
                 $timezone = new DateTimeZone('Europe/Paris');
                 $currentDate = new DateTime('now', $timezone);
@@ -49,7 +46,6 @@ class QuestionController extends AbstractController
                     $afterTomorrowTimes[] = $time;
                 }
             }
-            
 
             $errors = $this->validate($question);
             $user = $userManager->selectOneById($_SESSION['id']);
@@ -70,11 +66,9 @@ class QuestionController extends AbstractController
 
                 ]
             );
-            
         } else {
             header("Location: /login");
         }
-
     }
 
     private function getAvailableTimes(): array
