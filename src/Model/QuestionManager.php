@@ -45,7 +45,7 @@ class QuestionManager extends AbstractManager
         $statement->bindValue(':author', $authorId, PDO::PARAM_INT);
         $statement->execute();
 
-        $questionId = (int)$this->pdo->lastInsertId();
+        $questionId = (int) $this->pdo->lastInsertId();
 
         if (isset($question['tags']) && is_array($question['tags'])) {
             foreach ($question['tags'] as $tagId) {
@@ -62,5 +62,32 @@ class QuestionManager extends AbstractManager
         $statement->execute();
 
         return $statement->fetch();
+    }
+    public function search(string $query): array
+    {
+        $stmt = $this->pdo->prepare("SELECT q.*, 
+       COUNT(DISTINCT p.user_id) AS participant_count, 
+       GROUP_CONCAT(t.name SEPARATOR ', ') AS tag_list
+        FROM question AS q
+        LEFT JOIN participant AS p ON q.id = p.question_id
+        LEFT JOIN question_tag AS qt ON q.id = qt.question_id
+        LEFT JOIN tag AS t ON qt.tag_id = t.id
+        WHERE q.title LIKE :query OR q.description LIKE :query
+        GROUP BY q.id
+        ORDER BY q.created_at DESC;");
+        $query = '%' . $query . '%';
+        $stmt->bindValue(':query', $query, PDO::PARAM_STR);
+
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function selectAllByTag(int $tagId): array
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM question q 
+        JOIN question_tag qt ON q.id = qt.question_id 
+        JOIN " . self::TABLE . " t ON qt.tag_id = t.id WHERE t.id = :tagId ");
+        $stmt->bindValue(':tagId', $tagId, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

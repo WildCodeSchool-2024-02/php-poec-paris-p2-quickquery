@@ -1,0 +1,10 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+	<img src="{{user.image_profil}}">
+	<p>email :
+		{{ user.email }}</p>
+	<h1>user :
+		{{ user.pseudo }}</h1>
+
+{% endblock %}

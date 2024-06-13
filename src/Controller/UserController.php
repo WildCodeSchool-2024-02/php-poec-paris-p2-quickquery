@@ -12,8 +12,15 @@ class UserController extends AbstractController
     {
         parent::__construct();
         if (isset($_SESSION['id'])) {
-            $this->userId = (int)$_SESSION['id'];
+            $this->userId = (int) $_SESSION['id'];
         }
+    }
+    public function show(): string
+    {
+        $userManager = new UserManager();
+        $user = $userManager->selectOneById($_SESSION['id']);// a changer avec le conctruc de pierre si besoin);
+
+        return $this->twig->render('User/info.html.twig', ['user' => $user]);
     }
 
     public function register(): ?string
@@ -60,7 +67,7 @@ class UserController extends AbstractController
 
             if (empty($errors)) {
                 $user = $userManager->getByEmail($email);
-                $_SESSION['id'] = $user['id'] ;
+                $_SESSION['id'] = $user['id'];
                 header('Location: /?login=1');
                 exit();
             }
@@ -69,8 +76,8 @@ class UserController extends AbstractController
         return $this->twig->render(
             'User/login.html.twig',
             [
-               'errors' => $errors,
-               'userId' => $this->userId,
+                'errors' => $errors,
+                'userId' => $this->userId,
             ]
         );
     }
@@ -127,7 +134,6 @@ class UserController extends AbstractController
         } elseif (!$user || !password_verify($password, $user['password'])) {
             $errors['password'] = 'Email or password not exists';
         }
-
         return $errors;
     }
 }
