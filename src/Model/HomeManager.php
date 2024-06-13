@@ -40,7 +40,6 @@ class HomeManager extends AbstractManager
         $statement = $this->pdo->prepare("SELECT * FROM " . static::TABLE . " WHERE id=:id");
         $statement->bindValue('id', $id, \PDO::PARAM_INT);
         $statement->execute();
-
         return $statement->fetch();
     }
 
@@ -59,15 +58,7 @@ class HomeManager extends AbstractManager
         $stmt = $this->pdo->prepare("SELECT * FROM question WHERE title LIKE :query OR description LIKE :query ORDER BY created_at DESC");
         $query = '%' . $query . '%';
         $stmt->bindValue(':query', $query, PDO::PARAM_STR);
-
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    }
-
-    public function searchByTag(): array
-    {
-        $stmt = $this->pdo->query('SELECT * FROM question ORDER BY created_at DESC LIMIT 5;');
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

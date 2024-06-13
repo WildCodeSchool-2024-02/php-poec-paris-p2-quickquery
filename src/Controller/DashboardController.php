@@ -3,16 +3,13 @@
 namespace App\Controller;
 
 use App\Model\QuestionManager;
-
 use App\Model\TagManager;
-use App\Model\ParticipantManager;
 use App\Model\UserManager;
-
 
 class DashboardController extends AbstractController
 {
     public function index(): string
-    { 
+    {
         $user = null;
         $msg = "";
         $results = "";
@@ -46,13 +43,12 @@ class DashboardController extends AbstractController
             } else {
                 $result['tag_list'] = [];
             }
-        } 
-      if (isset($_SESSION['id'])) {
+        }
+        if (isset($_SESSION['id'])) {
             $userManager = new UserManager();
             $user = $userManager->selectOneById($_SESSION['id']);
         }
-        var_dump($tag);
-        var_dump($results);
+
         return $this->twig->render('Home/index.html.twig', [
             'results' => $results,
             'query' => $query,
