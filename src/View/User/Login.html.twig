@@ -1,0 +1,36 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <div class="container">
+
+        <h1 class="title">Login</h1>
+
+        {% if errors is not empty %}
+            {% for error in errors %}
+            <div class="alert alert-danger d-flex align-items-center" role="alert">
+                <i class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" role="img" aria-label="Danger:"></i>
+                <div>{{ error }}</div>
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" id="form-log" class="card">
+            <div class="row card-body">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <input type="email" placeholder="Email" value="{{ user.email }}" name="email" id="email" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" placeholder="Password" value="{{ user.password }}" name="password" id="password" class="form-control">
+                    </div>
+                </div>
+
+                    <div id="selectedTagsDisplay" class="form-group"></div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-outline-dark btn-lg w100"> Connexion </button>
+                    </div>
+            </div>
+
+        </form>
+    </div>
+{% endblock %}

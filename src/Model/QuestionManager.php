@@ -10,7 +10,8 @@ class QuestionManager extends AbstractManager
 
     public function selectMostRecent()
     {
-        $statement = $this->pdo->query("
+            $statement = $this->pdo->query("
+
                 SELECT q.*, 
                     COUNT(DISTINCT p.user_id) as participant_count, 
                     t.tag_list
@@ -30,18 +31,19 @@ class QuestionManager extends AbstractManager
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function insert(array $question): int
+    public function insert(array $question, int $authorId): int
     {
         $tagManager = new TagManager();
         $statement = $this->pdo->prepare(
             "INSERT INTO " . self::TABLE . " 
             (`title`, `description`, `scheduled_at`, `created_at`, `author`) 
             VALUES 
-            (:title, :description, :scheduled_at, NOW(), 1)"
+            (:title, :description, :scheduled_at, NOW(), :author)"
         );
         $statement->bindValue(':title', $question['title'], PDO::PARAM_STR);
         $statement->bindValue(':description', $question['description'], PDO::PARAM_STR);
         $statement->bindValue(':scheduled_at', $question['scheduled_at'], PDO::PARAM_STR);
+        $statement->bindValue(':author', $authorId, PDO::PARAM_INT);
         $statement->execute();
         $questionId = (int) $this->pdo->lastInsertId();
 
@@ -60,6 +62,7 @@ class QuestionManager extends AbstractManager
         $statement->execute();
         return $statement->fetch();
     }
+  
     public function search(string $query): array
     {
         $stmt = $this->pdo->prepare("SELECT * FROM question WHERE title LIKE :query OR description LIKE :query ORDER BY created_at DESC");
@@ -69,3 +72,4 @@ class QuestionManager extends AbstractManager
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
+

@@ -4,49 +4,86 @@
     <div class="row card-body">
         <div class="col-md-6">
             <input type="hidden" value="{{ question.id }}" name="id">
-            <div class="form-group">
+            <div class="form-group m-3">
                 <input name="title" type="text" placeholder="Titre de votre question" value="{{ question.title }}" id="title" class="form-control">
             </div>
-            <div class="form-group">
+            <div class="form-group m-3">
                 <textarea name="description" placeholder="Description de votre question" id="description" rows="8" cols="50" class="form-control">{{ question.description }}</textarea>
             </div>
         </div>
         <div class="col-md-6 d-flex flex-column justify-content-between">
 
-			<div class="form-group">
-				<label for="scheduled_at">Heure du meeting</label>
-				<select id="scheduled_at" name="scheduled_at" class="form-control">
-					{% for time in availableTimes %}
-						<option value="{{ time }}" {% if time == question.scheduled_at or time == current_time %} selected {% endif %}>
-							{{ time }}
-						</option>
-					{% endfor %}
-				</select>
-			</div>
+            <button type="button" class="btn btn-secondary mb-3" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                Heure du meeting
+            </button>
 
-			<div class="form-group">
-				<button type="button" id="toggleTagsButton" class="btn btn-secondary">Choisir des tags
-				</button>
-				<span class="icon-circle" id="helpBtTags">
-					<i class="bi bi-info flex-shrink-0 me-2" role="img" aria-label="Info"></i>
-				</span>
-				<div class="alert alert-light d-none" role="alert" id="layerHelpMsg">
-					CTRL + Click pour multi-selectionner les tags !
-				</div>
+            <!-- Modal -->
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Heure du meeting</h1>
+                        </div>
+                        <div class="modal-body row-cols-3 d-flex m-3">
+                            {% set today = "now"|date("d/m") %}
+                            {% set tomorrow = "now +1 day"|date("d/m") %}
+                            {% set afterTomorrow = "now +2 days"|date("d/m") %}
+                            <div class="col">
+                                <h4> Ajourd'hui {{today}} </h4>
+                                <div class=" d-flex flex-column justify-content-center">
+                                    {% for time in todayTimes %}
+                                        <input type="radio" class="btn-check" id="time_{{ loop.index }}" value="{{ time }}" name="scheduled_at">
+                                        <label for="time_{{ loop.index }}" class="btn btn-outline-dark m-2">{{ time|date('H:i') }}</label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h4> Demain {{tomorrow}} </h4>
+                                <div class=" d-flex flex-column justify-content-center">
+                                    {% for time in tomorrowTimes %}
+                                        <input type="radio" class="btn-check" id="tomorrow_time_{{ loop.index }}" value="{{ time }}" name="scheduled_at">
+                                        <label for="tomorrow_time_{{ loop.index }}" class="btn btn-outline-dark m-2">{{time|date('H:i')}}</label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h4> {{afterTomorrow}} </h4>
+                                <div class=" d-flex flex-column justify-content-center">
+                                    {% for time in afterTomorrowTimes %}
+                                        <input type="radio" class="btn-check" id="after_tomorrow_time_{{ loop.index }}" value="{{ time }}" name="scheduled_at">
+                                        <label for="after_tomorrow_time_{{ loop.index }}" class="btn btn-outline-dark m-2">{{time|date('H:i')}}</label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Valider</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-				<div id="tagsDropdown" style="display: none; margin-top: 10px;">
-					<select name="tags[]" id="tagsSelect" multiple class="form-control">
-						{% for tag in tags %}
-							<option value="{{ tag.id }}" {% if tag.id in selectedTags %} selected {% endif %}>{{ tag.name }}</option>
-						{% endfor %}
-					</select>
-				</div>
-			</div>
-			<div id="selectedTagsDisplay" class="form-group"></div>
-			<div class="form-group">
-				<button type="submit" class="btn btn-outline-dark btn-lg w100">Poser la question !</button>
-			</div>
-		</div>
-	</div>
-
+            <div class="form-group">
+                <button type="button" id="toggleTagsButton" class="btn btn-secondary mb-3">Choisir des tags </button>
+                <span class="icon-circle" id="helpBtTags">
+                    <i class="bi bi-info flex-shrink-0 me-2" role="img" aria-label="Info"></i>
+                </span>
+                <div class="alert alert-light d-none" role="alert" id="layerHelpMsg">
+                    CTRL + Click pour multi-selectionner les tags !
+                </div>
+                
+                <div id="tagsDropdown" style="display: none; margin-top: 10px;">
+                    <select name="tags[]" id="tagsSelect" multiple class="form-control">
+                        {% for tag in tags %}
+                            <option value="{{ tag.id }}" {% if tag.id in selectedTags %}selected{% endif %}>{{ tag.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div id="selectedTagsDisplay" class="form-group"></div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-outline-dark btn-lg w100">Poser la question !</button>
+            </div>
+        </div>
+    </div>
 </form>

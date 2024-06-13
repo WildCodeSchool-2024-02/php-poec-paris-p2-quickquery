@@ -6,12 +6,14 @@ use App\Model\QuestionManager;
 
 use App\Model\TagManager;
 use App\Model\ParticipantManager;
+use App\Model\UserManager;
 
 
 class DashboardController extends AbstractController
 {
     public function index(): string
-    {
+    { 
+        $user = null;
         $msg = "";
         $results = "";
         $query = $_POST['search'] ?? null;
@@ -19,6 +21,7 @@ class DashboardController extends AbstractController
         $tag = 2;
         $questionManager = new QuestionManager();
         $tagManager = new TagManager();
+
 
         if (isset($_GET['alert']) && $_GET['alert'] == 1) {
             $msg = "Alerte activée !";
@@ -43,6 +46,10 @@ class DashboardController extends AbstractController
             } else {
                 $result['tag_list'] = [];
             }
+        } 
+      if (isset($_SESSION['id'])) {
+            $userManager = new UserManager();
+            $user = $userManager->selectOneById($_SESSION['id']);
         }
         var_dump($tag);
         var_dump($results);
@@ -50,7 +57,8 @@ class DashboardController extends AbstractController
             'results' => $results,
             'query' => $query,
             'tag' => $tag,
-            'msg' => $msg
+            'msg' => $msg,
+            'user' => $user,
         ]);
     }
 }
