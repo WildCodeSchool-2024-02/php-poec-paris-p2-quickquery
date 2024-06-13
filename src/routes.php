@@ -10,4 +10,5 @@ return [
     'logout' => ['UserController', 'logout'],
     'contact' => ['ContactController', 'index'],
     'search' => ['DashboardController', 'index'],
+    'info' => ['UserController', 'show',],
 ];

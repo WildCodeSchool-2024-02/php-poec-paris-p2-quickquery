@@ -1,24 +1,35 @@
 <div class="sidebar">
-    <div class="user-profile">
-        {% if user %}
-            <section>
-                <div class="avatar">
-                    <i class="bi bi-person-circle icon-large"></i>
-                </div>
-                <p><b>Bonjour {{ user.pseudo }}</b></p>
-                <p><a href= "logout">Logout</a></p> 
-            
-        {% else %}
-            <p><a href="/register">Subscribe</a></p>
-            <p><a href="/login">Login</a></p>
-        </section>
-        {% endif %}
-    </div>
-    <hr>
-    <div class="nav-main">
-        <a href="/">Home</a>
-        <a href="#">About</a>
-        <a href="#">Services</a>
-        <a href="/contact">Contact</a>
-    </div>
+	<div class="user-profile">
+		{% if user %}
+			<section>
+				<div href="/info" class="avatar">
+					<i class="bi bi-person-circle icon-large"></i>
+				</div>
+				<p>
+					<a href="/info">Bonjour,
+						{{ user.pseudo }}
+						!</a>
+				</p>
+
+				<p>
+					<a href="logout">Logout</a>
+				</p>
+
+			{% else %}
+				<p>
+					<a href="/register">Subscribe</a>
+				</p>
+				<p>
+					<a href="/login">Login</a>
+				</p>
+			</section>
+		{% endif %}
+	</div>
+	<hr>
+	<div class="nav-main">
+		<a href="/">Home</a>
+		<a href="#">About</a>
+		<a href="#">Services</a>
+		<a href="/contact">Contact</a>
+	</div>
 </div>
