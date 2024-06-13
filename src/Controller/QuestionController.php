@@ -13,62 +13,153 @@ use App\Model\AlertManager;
 
 class QuestionController extends AbstractController
 {
-    public function add()
+    private int $userId;
+
+    public function __construct()
     {
+        parent::__construct();
+        if (isset($_SESSION['id'])) {
+            $this->userId = (int)$_SESSION['id'];
+        }
+    }
+
+    public function addQuestion(): ?string
+    {
+        $this->ensureUserIsLoggedIn();
 
         $errors = [];
         $question = [];
         $selectedTags = [];
         $userManager = new UserManager();
         $tagManager = new TagManager();
-        $tags = $tagManager->selectAll();
+
+        $tags = $this->getSortedTags($tagManager);
         $availableTimes = $this->getAvailableTimes();
+        $timeSlots = $this->categorizeTimes($availableTimes);
+
+        if ($_SERVER["REQUEST_METHOD"] === 'POST') {
+            $question = $_POST;
+            $errors = $this->validate($question);
+
+            if (empty($errors)) {
+                $this->sanitizeQuestionInput($question);
+                $selectedTags = $question['tags'] ?? [];
+
+                $questionManager = new QuestionManager();
+                $questionManager->insert($question, $this->userId);
+                header("Location: /?question=1");
+                exit();
+            }
+        }
+
+        $user = $userManager->selectOneById($this->userId);
+
+        return $this->twig->render(
+            'Question/add.html.twig',
+            [
+                'errors' => $errors,
+                'tags' => $tags,
+                'selectedTags' => $selectedTags,
+                'question' => $question,
+                'todayTimes' => $timeSlots['todayTimes'],
+                'tomorrowTimes' => $timeSlots['tomorrowTimes'],
+                'afterTomorrowTimes' => $timeSlots['afterTomorrowTimes'],
+                'user' => $user,
+            ]
+        );
+    }
+
+    private function ensureUserIsLoggedIn(): void
+    {
+        if (!isset($_SESSION['id'])) {
+            header("Location: /login");
+            exit();
+        }
+    }
+
+    private function getSortedTags(TagManager $tagManager): array
+    {
+        $tags = $tagManager->selectAll();
+        usort($tags, function ($indexa, $indexb) {
+            return strcmp($indexa['name'], $indexb['name']);
+        });
+        return $tags;
+    }
+
+    private function categorizeTimes(array $availableTimes): array
+    {
         $todayTimes = [];
         $tomorrowTimes = [];
         $afterTomorrowTimes = [];
 
-        if (isset($_SESSION['id'])) {
-            foreach ($availableTimes as $time) {
-                $date = new DateTime($time);
-                $timezone = new DateTimeZone('Europe/Paris');
-                $currentDate = new DateTime('now', $timezone);
-                $currentDate->setTime(0, 0);
+        $timezone = new DateTimeZone('Europe/Paris');
+        $currentDate = new DateTime('now', $timezone);
+        $currentDate->setTime(0, 0);
 
-                $todayDate = clone $currentDate;
-                $tomorrowDate = (clone $currentDate)->modify('+1 day');
-                $afterTomorrowDate = (clone $currentDate)->modify('+2 days');
+        $todayDate = clone $currentDate;
+        $tomorrowDate = (clone $currentDate)->modify('+1 day');
+        $afterTomorrowDate = (clone $currentDate)->modify('+2 days');
 
-                if ($date->format('Y-m-d') == $todayDate->format('Y-m-d')) {
-                    $todayTimes[] = $time;
-                } elseif ($date->format('Y-m-d') == $tomorrowDate->format('Y-m-d')) {
-                    $tomorrowTimes[] = $time;
-                } elseif ($date->format('Y-m-d') == $afterTomorrowDate->format('Y-m-d')) {
-                    $afterTomorrowTimes[] = $time;
-                }
+        foreach ($availableTimes as $time) {
+            $date = new DateTime($time);
+            if ($date->format('Y-m-d') == $todayDate->format('Y-m-d')) {
+                $todayTimes[] = $time;
+            } elseif ($date->format('Y-m-d') == $tomorrowDate->format('Y-m-d')) {
+                $tomorrowTimes[] = $time;
+            } elseif ($date->format('Y-m-d') == $afterTomorrowDate->format('Y-m-d')) {
+                $afterTomorrowTimes[] = $time;
             }
-
-            $errors = $this->validate($question);
-            $user = $userManager->selectOneById($_SESSION['id']);
-
-            $this->processPostData($errors, $question, $selectedTags);
-
-            return $this->twig->render(
-                'Question/add.html.twig',
-                [
-                    'errors' => $errors,
-                    'tags' => $tags,
-                    'selectedTags' => $selectedTags,
-                    'question' => $question,
-                    'todayTimes' => $todayTimes,
-                    'tomorrowTimes' => $tomorrowTimes,
-                    'afterTomorrowTimes' => $afterTomorrowTimes,
-                    'user' => $user,
-
-                ]
-            );
-        } else {
-            header("Location: /login");
         }
+
+        return [
+            'todayTimes' => $todayTimes,
+            'tomorrowTimes' => $tomorrowTimes,
+            'afterTomorrowTimes' => $afterTomorrowTimes,
+        ];
+    }
+
+    private function sanitizeQuestionInput(array &$question): void
+    {
+        if (isset($question['title'])) {
+            $question['title'] = htmlentities(trim($question['title']), ENT_QUOTES, 'UTF-8');
+        }
+        if (isset($question['description'])) {
+            $question['description'] = htmlentities(trim($question['description']), ENT_QUOTES, 'UTF-8');
+        }
+        if (isset($question['scheduled_at'])) {
+            $question['scheduled_at'] = htmlentities(trim($question['scheduled_at']), ENT_QUOTES, 'UTF-8');
+        }
+    }
+
+    private function validate(array $question): array
+    {
+        $errors = [];
+
+        if (empty($question['title'])) {
+            $errors[] = 'The title is empty';
+        }
+        if (!empty($question['title']) && strlen($question['title']) > 255) {
+            $errors[] = 'The title must be less than 255 characters';
+        }
+
+        if (empty($question['description'])) {
+            $errors[] = 'The description is required';
+        }
+
+        if (empty($question['scheduled_at'])) {
+            $errors[] = 'The date and time are required';
+        } else {
+            $selectedTime = \DateTime::createFromFormat('Y-m-d H:i:s', $question['scheduled_at']);
+
+            if (!$selectedTime) {
+                $errors[] = 'The date and time format is invalid';
+            }
+        }
+
+        if (empty($question['tags'])) {
+            $errors[] = 'You must choose at least 1 tag';
+        }
+        return $errors;
     }
 
     private function getAvailableTimes(): array
@@ -92,98 +183,25 @@ class QuestionController extends AbstractController
         return $times;
     }
 
-    private function validate(array $question): array
+    public function participate(): void
     {
-        $errors = [];
-
-        if (empty($question['title'])) {
-            $errors[] = 'Le titre est vide';
-        }
-        if (!empty($question['title']) && strlen($question['title']) > 255) {
-            $errors[] = 'Le titre doit faire moins de 255 caracteres';
+        if (isset($_POST['questionId'])) {
+            $questionId = htmlentities(trim($_POST['questionId']));
         }
 
-        if (empty($question['description'])) {
-            $errors[] = 'La description est obligatoire';
-        }
+        $participantManager = new ParticipantManager();
+        $questionId = (int)$_POST['questionId'];
+        $participantManager->insert($this->userId, $questionId);
 
-        if (empty($question['scheduled_at'])) {
-            $errors[] = 'La date et heure sont obligatoires';
-        } else {
-            $selectedTime = \DateTime::createFromFormat('Y-m-d H:i:s', $question['scheduled_at']);
-
-            if (!$selectedTime) {
-                $errors[] = 'Le format de la date et heure est invalide';
-            }
-        }
-
-        if (empty($question['tags'])) {
-            $errors[] = 'Vous devez choisir au moins 1 tag';
-        } elseif (!is_array($question['tags'])) {
-            $errors[] = 'Probleme de tableau array des tags';
-        }
-
-        return $errors;
-    }
-
-    private function processPostData(array &$errors, array &$question, array &$selectedTags): void
-    {
-        if ($_SERVER["REQUEST_METHOD"] === 'POST') {
-            $questionManager = new QuestionManager();
-
-            $question = $_POST;
-
-            if (isset($_POST['title'])) {
-                $_POST['title'] = htmlentities(trim($_POST['title']), ENT_QUOTES, 'UTF-8');
-            }
-            if (isset($_POST['description'])) {
-                $_POST['description'] = htmlentities(trim($_POST['description']), ENT_QUOTES, 'UTF-8');
-            }
-            if (isset($_POST['scheduled_at'])) {
-                $_POST['scheduled_at'] = htmlentities(trim($_POST['scheduled_at']), ENT_QUOTES, 'UTF-8');
-            }
-
-            $errors = $this->validate($_POST);
-
-            $selectedTags = $question['tags'] ?? [];
-            $authorId = $_SESSION['id'];
-
-            if (empty($errors)) {
-                $id = $questionManager->insert($question, $authorId);
-
-                if (!empty($id)) {
-                    header('Location:/?question');
-
-                    exit();
-                }
-            }
-        }
-    }
-
-    public function participate(): string
-    {
-        if ($_SERVER["REQUEST_METHOD"] === 'POST') {
-            $participantManager = new ParticipantManager();
-            if (isset($_POST['questionId'])) {
-                $userId = 1;
-                $questionId = (int)$_POST['questionId'];
-
-                $participantManager->insert($userId, $questionId);
-            }
-        }
-
-        return $this->twig->render('Home/index.html.twig', [
-        ]);
+        header('Location: /?participant=1');
     }
 
     public function alert(): void
     {
         $questionId = htmlentities(trim($_POST['questionId']));
 
-        $userId = 2;
-
         $alertManager = new AlertManager();
-        $alertManager->insert($userId, $questionId);
+        $alertManager->insert($this->userId, $questionId);
 
         header('Location: /?alert=1');
     }

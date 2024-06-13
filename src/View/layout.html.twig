@@ -1,51 +1,22 @@
-
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}QuickQuery{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/assets/css/style.css">
+    <title>{% block title %}{% endblock %}</title>
+    {% block stylesheet %}{% endblock %}
 </head>
 <body>
-    <div class="header">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-        <a class="active" href="/"><img src="/assets/images/quickquery_logo_3.png" id="logo" class="logo" alt="logo"></a>
-        <a href="#about">About</a>
-        
-        <a {% if user %} 
-        href="question/add"
-        {% else %} 
-        href="login"
-        {% endif %}>Questions</a>
-        <a href="#contact">Contact</a>
-    </div>
+    {% block header %}
+		{% include "header.html.twig" %}
+	{% endblock %}
 
-    <div class="sidebar">
-        {% if user %}
-            <article>
-                <div class="avatar">
-                    <i class="bi bi-person-circle icon-large"></i>
-                </div>
-                <p>Bonjour,  {{ user.pseudo }} !</p>
-                <p><a href= "logout">Déconnexion</a></p> 
-            </article>
-        {% else %}
-            <p><a href="/register">S'inscrire</a></p>
-            <p><a href="/login">Connexion</a></p>
-        {% endif %}
-        <a href="#section1">Section 1</a>
-        <a href="#section2">Section 2</a>
-        <a href="#section3">Section 3</a>
-        <a href="#section4">Section 4</a>
-    </div>
+    {% block content %}{% endblock %}
 
-    <div class="content">
-        {% block content %}{% endblock %}
-    </div>
     {% block javascript %}{% endblock %}
-
 </body>
 </html>

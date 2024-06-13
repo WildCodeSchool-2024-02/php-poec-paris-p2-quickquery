@@ -1,27 +1,29 @@
 {% extends 'layout.html.twig' %}
-
 {% block content %}
     <div class="container">
+        {% include 'sidebar.html.twig' %}
+        <div class="main-question">
+            <h1 class="title">Ask a question</h1>
+            {% if errors is not empty %}
+                {% for error in errors %}
+                <div class="alert alert-danger d-flex align-items-center" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" role="img" aria-label="Danger:"></i>
+                    <div>{{ error }}</div>
+                </div>
+                {% endfor %}
+            {% endif %}
 
-        <h1 class="title">Poser une question</h1>
-
-        {% if errors is not empty %}
-            {% for error in errors %}
-            <div class="alert alert-danger d-flex align-items-center" role="alert">
-                <i class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" role="img" aria-label="Danger:"></i>
-                <div>{{ error }}</div>
-            </div>
-            {% endfor %}
-        {% endif %}
-        {% include 'Question/_form.html.twig' %}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+            {% include 'Question/_form.html.twig' %}
+            
+        </div>
 {% endblock %}
-
 {% block javascript %}
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var toggleButton = document.getElementById('toggleTagsButton');
+        var helpBtTags = document.getElementById('helpBtTags');
         var tagsSelect = document.getElementById('tagsSelect');
         var dropdown = document.getElementById('tagsDropdown');
         var selectedTagsDisplay = document.getElementById('selectedTagsDisplay');
@@ -35,6 +37,16 @@
                     dropdown.style.display = 'none';
                     this.textContent = 'Selectionner des tags';
                 }
+            });
+        }
+
+        if(helpBtTags){
+            helpBtTags.addEventListener('mouseover', function() {
+                layerHelpMsg.classList.remove('d-none');
+            });
+
+            helpBtTags.addEventListener('mouseout', function() {
+                layerHelpMsg.classList.add('d-none');
             });
         }
 

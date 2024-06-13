@@ -10,7 +10,7 @@ class QuestionManager extends AbstractManager
 
     public function selectMostRecent()
     {
-            $statement = $this->pdo->query("
+        $statement = $this->pdo->query("
                 SELECT q.*, 
                     COUNT(DISTINCT p.user_id) as participant_count, 
                     t.tag_list
@@ -24,7 +24,6 @@ class QuestionManager extends AbstractManager
                 ) AS t ON q.id = t.question_id
                 GROUP BY q.id
                 ORDER BY q.created_at DESC
-                LIMIT 6
             ");
 
         return $statement->fetchAll(PDO::FETCH_ASSOC);

@@ -2,14 +2,20 @@
 
 namespace App\Controller;
 
-use password_hash;
 use App\Model\UserManager;
 
 class UserController extends AbstractController
 {
-    /**
-     * Add a new inscription
-     */
+    private $userId = null;
+
+    public function __construct()
+    {
+        parent::__construct();
+        if (isset($_SESSION['id'])) {
+            $this->userId = (int)$_SESSION['id'];
+        }
+    }
+
     public function register(): ?string
     {
         $errors = [];
@@ -25,15 +31,17 @@ class UserController extends AbstractController
                 $id = $userManager->insert($user);
 
                 if (!empty($id)) {
-                    header('Location:/');
+                    header('Location:/?register=1');
+                    exit();
                 }
             }
         }
         return $this->twig->render(
-            'User/inscription.html.twig',
+            'User/register.html.twig',
             [
                 'errors' => $errors,
                 'user' => $user,
+                'userId' => $this->userId,
 
             ]
         );
@@ -41,7 +49,6 @@ class UserController extends AbstractController
 
     public function login(): ?string
     {
-
         $errors = [];
         $userManager = new UserManager();
 
@@ -54,8 +61,8 @@ class UserController extends AbstractController
             if (empty($errors)) {
                 $user = $userManager->getByEmail($email);
                 $_SESSION['id'] = $user['id'] ;
-                header('Location: /');
-                exit;
+                header('Location: /?login=1');
+                exit();
             }
         }
 
@@ -63,6 +70,7 @@ class UserController extends AbstractController
             'User/login.html.twig',
             [
                'errors' => $errors,
+               'userId' => $this->userId,
             ]
         );
     }
@@ -80,23 +88,23 @@ class UserController extends AbstractController
         $userManager = new UserManager();
 
         if (empty($user['pseudo'])) {
-            $errors[] = 'Le champ \'pseudo\' est à remplir';
+            $errors[] = 'Pseudo field required';
         }
 
         if (empty($user['email'])) {
-            $errors['email'] = 'L\'email est requis.';
+            $errors['email'] = 'Email is required';
         } elseif (!filter_var($user['email'], FILTER_VALIDATE_EMAIL)) {
-            $errors['email'] = 'L\'email n\'est pas valide.';
+            $errors['email'] = 'Email not valid';
         } elseif ($userManager->getByEmail($user['email'])) {
-            $errors['email'] = 'Cet email est déjà utilisé. <a href="   /login">Voulez-vous vous connecter ?</a>';
+            $errors['email'] = 'This email already used. <a href="/login">Login?</a>';
         }
 
         if (empty($user['password'])) {
-            $errors['password'] = 'Le mot de passe est requis.';
+            $errors['password'] = 'Password required.';
         } elseif (strlen($user['password']) < 8) {
-            $errors['password'] = 'Le mot de passe doit contenir au moins 8 caractères.';
+            $errors['password'] = '8 minimum caracters for password required';
         } elseif (!preg_match('/[A-Za-z].*[0-9]|[0-9].*[A-Za-z]/', $user['password'])) {
-            $errors['password'] = 'Le mot de passe doit contenir des lettres et des chiffres.';
+            $errors['password'] = 'Password must contains letters et numbers';
         }
 
         return $errors;
@@ -109,15 +117,15 @@ class UserController extends AbstractController
         $user = $userManager->getByEmail($email);
 
         if (empty($email)) {
-            $errors['email'] = 'L\'email est requis.';
+            $errors['email'] = 'Email required';
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $errors['email'] = 'L\'email n\'est pas valide.';
+            $errors['email'] = 'Email not valid';
         }
 
         if (empty($password)) {
-            $errors['password'] = 'Le mot de passe est requis.';
+            $errors['password'] = 'Password required';
         } elseif (!$user || !password_verify($password, $user['password'])) {
-            $errors['password'] = 'Email ou mot de passe incorrect';
+            $errors['password'] = 'Email or password not exists';
         }
 
         return $errors;
