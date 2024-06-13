@@ -1,36 +1,24 @@
 {% extends 'layout.html.twig' %}
 {% block content %}
 <div class="container">
-    <div class="sidebar">
-        <div class="user-profile">
-            {% if session.user is defined %}
-                <div class="avatar">
-                    <i class="bi bi-person-circle icon-large"></i>
-                    <p>Bonjour,  {{ session.user.pseudo }}</p>
-                    <p><a href="/logout">Logout</a></p> 
-                </div>
-             {% else %}
-                <a href="/register">Register</a>
-                <a href="/login">Login</a>
-             {% endif %}
-        </div>
-        <hr>
-        <div class="nav-main">
-            <a href="#">Home</a>
-            <a href="#">About</a>
-            <a href="#">Services</a>
-            <a href="#">Contact</a>
-        </div>
-    </div>
+    {% include 'sidebar.html.twig' %}
+    <div class="main">
     {% if msg is not empty %}
         <div class="alert alert-success d-flex align-items-center" role="alert">
             <i class="bi bi-check-circle-fill flex-shrink-0 me-2 mr-3" role="img" aria-label="Success:"></i>
             <div>{{ msg }}</div>
         </div>
     {% endif %}
-    <div class="main">
-    <h2 class="title">Last Questions</h2>
-    <div class="grid-container">
+
+        {% if search is not empty %}
+            <h2 class="title">Search result for "{{ search }}"</h2>
+        {% elseif search is not empty and lastQuestions is empty %}
+            <h2>No result</h2>
+        {% else %}
+            <h2 class="title">Last questions</h2>
+        {% endif %}
+
+    <div class="grid-container">   
         {% for lastQuestion in lastQuestions %}
         <div class="grid-item">
             <div class="row">
@@ -54,9 +42,11 @@
                     </div>
                     <span>|</span>
                     <div class="participate">
-                        <form id="participation-form" method="POST" action="/question/participate">
-                            <input type="hidden" name="userId" value="1">
-                            <input type="hidden" name="questionId" value="{{ lastQuestion.id }}">
+                        <form id="participation-form" method="POST" {% if user %} action="/question/participate" {% else %} action="/login" {% endif %}>
+                            {% if user %}
+                                <input type="hidden" name="userId" value="1">
+                                <input type="hidden" name="questionId" value="{{ lastQuestion.id }}">
+                            {% endif %}
                             <button type="submit" class="btn-card">
                                 <i class="bi bi-hand-index-thumb" data-bs-toggle="tooltip" data-bs-placement="top"
                                 data-bs-custom-class="custom-tooltip" data-bs-title="To participate question"></i>
@@ -65,11 +55,15 @@
                     </div>
                     <span>|</span>
                     <div class="like">
-                        <form id="like-form" method="POST" action="/question/alert">
-                            <input type="hidden" name="userId" value="1">
-                            <input type="hidden" name="questionId" value="{{ lastQuestion.id }}">
-                            <button type="submit" class="btn-card"><i class="bi bi-bell" data-bs-toggle="tooltip" data-bs-placement="top"
-                                data-bs-custom-class="custom-tooltip" data-bs-title="Be alerted on question meeting lauching"></i></button>
+                        <form id="like-form" method="POST" {% if user %} action='/question/alert' {% else %} action='/login' {% endif %}>
+                            {% if user %}
+                                <input type="hidden" name="userId" value="1">
+                                <input type="hidden" name="questionId" value="{{ lastQuestion.id }}">
+                            {% endif %}
+                            <button type="submit" class="btn-card">
+                                <i class="bi bi-bell" data-bs-toggle="tooltip" data-bs-placement="top"
+                                data-bs-custom-class="custom-tooltip" data-bs-title="Be alerted on question meeting start"></i>
+                            </button>
                         </form>
                     </div>
                 </div>

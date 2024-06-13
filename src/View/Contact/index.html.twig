@@ -1,0 +1,17 @@
+{% extends 'layout.html.twig' %}
+{% block content %}
+<div class="container">
+    {% include 'sidebar.html.twig' %}
+    <div class="main">
+
+        {% if msg is not empty %}
+            <div class="alert alert-success d-flex align-items-center" role="alert">
+                <i class="bi bi-check-circle-fill flex-shrink-0 me-2 mr-3" role="img" aria-label="Success:"></i>
+                <div>{{ msg }}</div>
+            </div>
+        {% endif %}
+
+        {% include 'Contact/form.html.twig' %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <div class="container">
+
+        {% if userId is not defined and userId is empty %}
+            {% include 'sidebar.html.twig' %}
+        {% endif %}
+
+        <div class="main-register">
+            <h1 class="title">Register</h1>
+
+            {% if errors is not empty %}
+                {% for error in errors %}
+                <div class="alert alert-danger d-flex align-items-center" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" role="img" aria-label="Danger:"></i>
+                    <div>{{ error|raw }}</div>
+                </div>
+                {% endfor %}
+            {% endif %}
+
+            {% if userId is defined and userId is not empty %}
+                <h5>You are already registered and logedin :)</h5>
+                <p><a href="/logout">Logout?</a></p>
+            {% else %}            
+                <form method="post" id="form-inscription" class="card">
+                    <div class="register">
+                        <input type="hidden" value="{{ inscription.id }}" name="id">
+                        <div class="form-group mb-3">
+                            <input type="text" placeholder="Pseudo" value="{{ inscription.pseudo }}" name="pseudo" id="pseudo" class="form-control">
+                        </div>
+                        <div class="form-group mb-3">
+                            <input type="email" placeholder="Email" value="{{ inscription.email }}" name="email" id="email" class="form-control">
+                        </div>
+                        <div class="form-group mb-3">
+                            <input type="password" placeholder="Password" value="{{ inscription.email }}" name="password" id="password" class="form-control">
+                        </div>
+            
+                        <div id="selectedTagsDisplay" class="form-group"></div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-outline-dark btn-lg w100"> Register! </button>
+                        </div>
+                    </div>
+                        
+                </form>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

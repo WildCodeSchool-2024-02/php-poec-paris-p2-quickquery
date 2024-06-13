@@ -57,20 +57,6 @@ body {
     width: 15rem;
 }
 
-.icon-circle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background-color: #899bad;
-    color: white;
-    font-size: 1rem;
-    cursor: pointer;
-    position: relative;
-}
-
 #layerHelpMsg {
     position: absolute;
     top: 4rem;
@@ -116,8 +102,8 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 16px;
-    height: 16px;
+    width: 1.5rem;
+    height: 1.5rem;
     border-radius: 50%;
     background-color: #899bad;
     color: white;
@@ -126,16 +112,18 @@ body {
     position: relative;
 }
 
+.me-2 {
+    margin-right: 0.1rem !important;
+}
+
 #layerHelpMsg {
     position: absolute;
-    top: 4rem;
-    left: 17rem;
+    top: 5rem;
+    left: 40rem;
     width: max-content;
-    box-shadow: 0px 2px 5px #aaa;
     z-index: 1000;
     font-size: .9rem;
 }
-
 
 .navbar .container-fluid {
     justify-content: unset;
@@ -164,13 +152,9 @@ form input[type='search'] {
     width: 12rem;
 }
 
-.user-profile{
-    padding: 1rem;
-}
-
 .askquestion {
     margin-left: 5rem;
-    padding-right: 2rem;
+    padding: 0 3rem 0 1rem !important;
     text-transform: uppercase;
 }
 
@@ -183,6 +167,7 @@ form input[type='search'] {
 .sidebar {
     padding: 3rem;
     background-color: #e7e7e7;
+    height: 100vh;
 }
 
 .sidebar a {
@@ -197,7 +182,14 @@ form input[type='search'] {
 }
 
 .main {
-    padding: 0 5rem;
+    padding: 2rem 5rem;
+}
+.main-register, .main-login {
+    padding: 2rem 17rem;
+}
+
+.main-question {
+    padding: 2rem 5rem;
 }
 
 button.readmore {
@@ -276,13 +268,11 @@ button.readmore {
 .info-row > span {
     color: #c9c9c9;
 }
-
-.row {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    padding: 1rem;
+#form-contact {
+    width: 25rem;
 }
 
-
-
+.login, .register {
+    width: 30rem;
+    padding: 2rem;
+}
