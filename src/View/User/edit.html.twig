@@ -1,0 +1,67 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <form method="post" id="form-edit" class="card">
+        <div class="row card-body">
+            <div class="col-md-6">
+                <input type="hidden" value="{{ user.id }}" name="id">
+                <div class="form-group">
+                    <input type="text" placeholder="Pseudo" value="{{ user.pseudo }}" name="pseudo" id="pseudo" class="form-control">
+                </div>
+                
+                <div class="form-group">
+                    {% if user.image_profil %}
+                    <div>
+                        <img id="current-image" src="{{ user.image_profil }}" alt="Current Profile Picture" style="max-width: 150px; max-height: 150px;">
+                    </div>
+                    {% endif %}
+                    <label for="image_profil">Choose a profile picture:</label>
+                    <input type="file" value="{{ user.image_profil }}" name="image_profil" id="image_profil" accept="image/*" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <button type="submit"  class="btn btn-outline-dark btn-lg w100"> Mettre à jour </button>
+                </div>
+        </div>
+    </form>
+{% endblock %}
+
+{% block javascript %}
+<script>
+$(document).ready(function() {
+    // Change image src when a new file is selected
+    $('#image_profil').change(function() {
+        if (this.files && this.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#current-image').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(this.files[0]);
+        }
+    });
+    $('#form-edit').submit(function(event) {
+        event.preventDefault();
+
+        var formData = new FormData(this);
+
+        $.ajax({
+            url: $(this).attr('/controller/edit'),  // Chemin vers votre script PHP
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.redirect) {
+                    window.location.href = response.redirect; // Redirige vers l'URL fournie
+                } else {
+                    console.log('Erreur: réponse JSON inattendue', response);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Erreur lors de l\'envoi de fichier :', error);
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

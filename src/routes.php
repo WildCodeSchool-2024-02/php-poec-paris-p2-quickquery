@@ -11,4 +11,5 @@ return [
     'contact' => ['ContactController', 'index'],
     'search' => ['DashboardController', 'index'],
     'info' => ['UserController', 'show',],
+    'edit' => ['UserController', 'edit',],
 ];

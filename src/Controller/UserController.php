@@ -22,6 +22,44 @@ class UserController extends AbstractController
 
         return $this->twig->render('User/info.html.twig', ['user' => $user]);
     }
+    
+    public function edit(): string
+    {
+        $userManager = new UserManager();
+        $user = $userManager->selectOneById($_SESSION['id']);
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $user = array_map('htmlentities', array_map('trim', $_POST));
+    
+            // Vérification de la présence d'un fichier
+            if (isset($_FILES['image_profil']) && $_FILES['image_profil']['error'] == UPLOAD_ERR_OK) {
+                $uploadDir = 'assets/images/';
+                $uploadFile = $uploadDir . basename($_FILES['image_profil']['name']);
+    
+                // Déplacer le fichier téléchargé
+                if (move_uploaded_file($_FILES['image_profil']['tmp_name'], $uploadFile)) {
+                    $user['image_profil'] = $uploadFile;
+                } else {
+                    // Gérer l'erreur lors du téléchargement
+                    $user['image_profil'] = $user['image_profil'] ?? null;
+                    // Vous pouvez ajouter un message d'erreur ici si nécessaire
+                }
+            } else {
+                // Si pas de fichier téléchargé, garder l'image actuelle
+                $user['image_profil'] = $_POST['image_profil'] ?? $user['image_profil'];
+            }
+    
+            // Mise à jour de l'utilisateur
+            $userManager->update($user);
+            
+            header('Content-Type: application/json');
+            echo json_encode(['redirect' => '/info?id=' . $_SESSION['id']]);
+            exit();
+        }
+        return $this->twig->render('User/edit.html.twig', [
+            'user' => $user,
+        ]);
+    }
 
     public function register(): ?string
     {
@@ -34,12 +72,15 @@ class UserController extends AbstractController
             $user = array_map('htmlentities', array_map('trim', $_POST));
             $errors = $this->validateRegister($user);
 
+            if (empty($_FILES['image_profil'])) {
+                $user['image_profil'] = '/assets/images/photoDefault.png';
+            }
+
             if (empty($errors)) {
                 $id = $userManager->insert($user);
 
                 if (!empty($id)) {
-                    header('Location:/?register=1');
-                    exit();
+                    header('Location:/');
                 }
             }
         }
@@ -48,7 +89,6 @@ class UserController extends AbstractController
             [
                 'errors' => $errors,
                 'user' => $user,
-                'userId' => $this->userId,
 
             ]
         );

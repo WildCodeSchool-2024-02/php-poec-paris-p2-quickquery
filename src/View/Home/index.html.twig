@@ -1,5 +1,8 @@
 {% extends 'layout.html.twig' %}
 {% block content %}
+{% block head %}
+    <meta charset="UTF-8">
+{% endblock %}
 	<div class="container">
 		{% include 'sidebar.html.twig' %}
 		<div class="main">
@@ -70,7 +73,7 @@
 											<input type="hidden" name="questionId" value="{{ lastQuestion.id }}">
 										{% endif %}
 										<button type="submit" class="btn-card">
-											<i class="bi bi-hand-index-thumb" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="To participate question"></i>
+											<i class="bi bi-calendar-check" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="To participate question"></i>
 										</button>
 									</form>
 								</div>
@@ -93,9 +96,9 @@
 							</div>
 							<div class="card-question">
 								<div class="card-body">
-									<h4 class="card-title">{{ lastQuestion.title }}</h4>
+									<h4 class="card-title">{{ lastQuestion.title|raw }}</h4>
 									<p class="card-text">
-										"{{ lastQuestion.description|slice(0,80) }}"
+										"{{ lastQuestion.description|slice(0,80)|raw }}"
 										<button class="readmore" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="{{ lastQuestion.description }}">
 											[...]
 										</button>

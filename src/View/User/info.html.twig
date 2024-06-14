@@ -1,10 +1,17 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-	<img src="{{user.image_profil}}">
-	<p>email :
-		{{ user.email }}</p>
-	<h1>user :
-		{{ user.pseudo }}</h1>
 
+<div class="container">
+
+	<div class="main-login">
+
+		<h1 class="title">User profile</h1>
+
+		<p><img src="{{user.image_profil}}" alt="user profile of {{ user.pseudo }}"></p>
+		<h6>{{ user.email }}</h6>
+		<h6>{{ user.pseudo }}</h6>
+    	<a href="/edit?id={{ user.id }}">Edit</a>
+	</div>
+</div>
 {% endblock %}

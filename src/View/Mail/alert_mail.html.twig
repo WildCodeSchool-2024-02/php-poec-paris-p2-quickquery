@@ -1,0 +1,19 @@
+<h4 style="font-size: 1.25rem; font-weight: bold; margin: 10px auto; padding: 1.5rem; width: 25rem;">Vous êtes alerté pour :</h4>
+<div style="border: 1px solid #ececec; border-radius: .5rem; background-color: white; padding: 1.5rem; width: 25rem; margin: 10px auto;">
+    <div style="padding: 1.25rem;">
+        <h4 style="font-size: 1.25rem; font-weight: bold;">{{ question.title|raw }}</h4>
+        <p style="font-size: 1rem;">
+            "{{ question.description|raw }}"
+            <button style="border: none; background: none; color: #007bff; text-decoration: underline; cursor: pointer;" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="{{ question.description }}">
+            </button>
+        </p>
+        <p style="font-size: 1rem; font-weight: light;">Vous pourrez rejoindre la réunion sur ce lien : </p>
+        <p style="font-size: 1rem; font-weight: light;">https://meet.google.com/hzo-kyrs-ktp</p>
+        <span style="font-size: 1rem; font-weight: light;">Prévue pour : {{ question.scheduled_at|date("Y-m-d H:i") }}</span>
+        <div>
+            {% for tag in question.tag_list %}
+                <span style="display: inline-block; padding: .25em .4em; font-size: 1rem; font-weight: 700; line-height: 1; color: #fff; background-color: #6c757d; border-radius: .2rem;">{{ tag }}</span>
+            {% endfor %}
+        </div>
+    </div>
+</div>

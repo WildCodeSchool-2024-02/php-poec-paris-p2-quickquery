@@ -17,17 +17,33 @@ class UserManager extends AbstractManager
 
         $statement = $this->pdo->prepare(
             "INSERT INTO " . self::TABLE . " 
-            (`pseudo`, `email`, `password`) 
+            (`pseudo`, `email`, `password`, `image_profil`) 
             VALUES 
-            (:pseudo, :email, :password)"
+            (:pseudo, :email, :password, :image_profil)"
         );
         $statement->bindValue(':pseudo', $user['pseudo'], PDO::PARAM_STR);
         $statement->bindValue(':email', $user['email'], PDO::PARAM_STR);
         $statement->bindValue(':password', $hashedPassword, PDO::PARAM_STR);
+        $statement->bindValue(':image_profil', $user['image_profil'], PDO::PARAM_STR);
         $statement->execute();
 
-        return (int)$this->pdo->lastInsertId();
+        $userId = (int)$this->pdo->lastInsertId();
+
+        return $userId;
     }
+    public function update(array $user): bool
+    {
+        $statement = $this->pdo->prepare("UPDATE " . self::TABLE . " 
+        SET `pseudo` = :pseudo, `image_profil` = :image_profil WHERE id=:id" );
+
+        $statement->bindValue('id', $user['id'], \PDO::PARAM_INT);
+        $statement->bindValue(':pseudo', $user['pseudo'], PDO::PARAM_STR);
+        $statement->bindValue(':image_profil', $user['image_profil'], PDO::PARAM_STR);
+
+
+        return $statement->execute();
+    }
+
 
     public function getByEmail(string $email): array
     {
