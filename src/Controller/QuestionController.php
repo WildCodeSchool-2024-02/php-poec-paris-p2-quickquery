@@ -10,10 +10,12 @@ use App\Model\ParticipantManager;
 use App\Model\UserManager;
 use App\Model\TagManager;
 use App\Model\AlertManager;
+use \Mailjet\Resources;
 
 class QuestionController extends AbstractController
 {
     private int $userId;
+    private $userManager;
 
     public function __construct()
     {
@@ -21,6 +23,7 @@ class QuestionController extends AbstractController
         if (isset($_SESSION['id'])) {
             $this->userId = (int)$_SESSION['id'];
         }
+        $this->userManager = new UserManager();
     }
 
     public function addQuestion(): ?string
@@ -185,24 +188,115 @@ class QuestionController extends AbstractController
 
     public function participate(): void
     {
-        if (isset($_POST['questionId'])) {
-            $questionId = htmlentities(trim($_POST['questionId']));
+        $this->ensureUserIsLoggedIn();
+
+        $user = $this->userManager->getById($_SESSION['id']);
+        $recipientEmail = $user['email'];
+
+        $mj = new \Mailjet\Client('29c42176bad99900811075e341698b45', 'dcaa58b45620499270acfb463ff6dbbc', true, ['version' => 'v3.1']);
+        $body = [
+            'Messages' => [
+                [
+                    'From' => [
+                        'Email' => "nassim.boussaid.csm@gmail.com",
+                        'Name' => "Your Name"
+                    ],
+                    'To' => [
+                        [
+                            'Email' => $recipientEmail,
+                            'Name' => $user['pseudo']
+                        ]
+                    ],
+                    'Subject' => "Participation Confirmation",
+                    'TextPart' => "Dear user, thank you for participating!",
+                    'HTMLPart' => "<h3>Dear user, thank you for participating!</h3>"
+                ]
+            ]
+        ];
+        $response = $mj->post(Resources::$Email, ['body' => $body]);
+
+        if ($response->success()) {
+            echo 'Email sent successfully.';
+        } else {
+            echo 'Failed to send email.';
         }
 
-        $participantManager = new ParticipantManager();
-        $questionId = (int)$_POST['questionId'];
-        $participantManager->insert($this->userId, $questionId);
+    header('Location: /?participant=1');
+    exit();
+}
 
-        header('Location: /?participant=1');
+public function alert(): void
+{
+    $questionId = htmlentities(trim($_POST['questionId']));
+
+    $alertManager = new AlertManager();
+    $alertManager->insert($this->userId, $questionId);
+
+    $questionManager = new QuestionManager();
+    $question = $questionManager->selectOneById($questionId);
+
+    $userManager = new UserManager();
+    $user = $userManager->selectOneById($this->userId);
+    $recipientEmail = $user['email'];
+
+    $tagsHtml = '';
+    if (isset($question['tag_list']) && is_array($question['tag_list'])) {
+        foreach ($question['tag_list'] as $tag) {
+            $tagsHtml .= '<span style="display: inline-block; padding: .25em .4em; font-size: 75%; font-weight: 700; line-height: 1; color: #fff; background-color: #6c757d; border-radius: .2rem;">' . htmlentities($tag) . '</span> ';
+        }
     }
 
-    public function alert(): void
-    {
-        $questionId = htmlentities(trim($_POST['questionId']));
+    $userName = isset($user['name']) ? htmlentities($user['name']) : 'Unknown User';
 
-        $alertManager = new AlertManager();
-        $alertManager->insert($this->userId, $questionId);
+    $emailBody = '
+        <div style="border: 1px solid #ececec; border-radius: .5rem; background-color: white; padding: 1.5rem; width: 25rem; margin: 10px auto;">
+            <div style="padding: 1.25rem;">
+                <h4 style="font-size: 1.25rem; font-weight: bold;">' . htmlentities($question['title']) . '</h4>
+                <p style="font-size: 1rem;">
+                    "' . htmlentities(mb_strimwidth($question['description'], 0, 80, '...')) . '"
+                    <button style="border: none; background: none; color: #007bff; text-decoration: underline; cursor: pointer;" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="' . htmlentities($question['description']) . '">
+                        [...]
+                    </button>
+                </p>
+                <div style="font-size: .9rem; color: #555;">
+                    <span>' . $userName . '</span>
+                </div>
+                <div>
+                    ' . $tagsHtml . '
+                </div>
+            </div>
+        </div>';
 
-        header('Location: /?alert=1');
+    require '../vendor/autoload.php';
+    
+    $mj = new \Mailjet\Client('29c42176bad99900811075e341698b45', 'dcaa58b45620499270acfb463ff6dbbc', true, ['version' => 'v3.1']);
+    $body = [
+        'Messages' => [
+            [
+                'From' => [
+                    'Email' => "nassim.boussaid.csm@gmail.com",
+                    'Name' => "Quickquery"
+                ],
+                'To' => [
+                    [
+                        'Email' => $recipientEmail,
+                        'Name' => $user['pseudo']
+                    ]
+                ],
+                'Subject' => "Alert Notification",
+                'TextPart' => "Dear User, you have successfully created an alert for the question.",
+                'HTMLPart' => '<html><body>' . $emailBody . '</body></html>',
+            ]
+        ]
+    ];
+    $response = $mj->post(\Mailjet\Resources::$Email, ['body' => $body]);
+    if ($response->success()) {
+        echo "Email sent successfully.";
+    } else {
+        echo "Error sending email.";
     }
+
+    header('Location: /?alert=1');
+    exit();
+}
 }

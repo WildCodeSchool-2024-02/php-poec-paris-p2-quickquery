@@ -75,17 +75,21 @@
 									</form>
 								</div>
 								<span>|</span>
-								<div class="like">
-									<form id="like-form" method="POST" {% if user %} action='/question/alert' {% else %} action='/login' {% endif %}>
-										{% if user %}
-											<input type="hidden" name="userId" value="1">
-											<input type="hidden" name="questionId" value="{{ lastQuestion.id }}">
-										{% endif %}
-										<button type="submit" class="btn-card">
-											<i class="bi bi-bell" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Be alerted on question meeting start"></i>
-										</button>
-									</form>
-								</div>
+<div class="like">
+    <form id="like-form" method="POST" {% if user %} action='/question/alert' {% else %} action='/login' {% endif %}>
+        {% if user %}
+            <input type="hidden" name="userId" value="1">
+            <input type="hidden" name="questionId" value="{{ lastQuestion.id }}">
+        {% endif %}
+        <button type="submit" class="btn-card position-relative">
+            <i class="bi bi-bell" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Be alerted on question meeting start"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {{ lastQuestion.alert_count }}
+                <span class="visually-hidden">unread alerts</span>
+            </span>
+        </button>
+    </form>
+</div>
 							</div>
 							<div class="card-question">
 								<div class="card-body">

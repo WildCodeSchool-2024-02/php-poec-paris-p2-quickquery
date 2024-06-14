@@ -3,22 +3,14 @@
 namespace App\Model;
 
 use PDO;
-use password_hash;
 
 /**
- * This class make a PDO object instanciation.
+ * This class makes a PDO object instantiation.
  */
 class UserManager extends AbstractManager
 {
-    /**
-     * Add a new user
-     */
     public const TABLE = 'user';
 
-
-    /**
-     * Insert new item in database
-     */
     public function insert(array $user): int
     {
         $hashedPassword = password_hash($user['password'], PASSWORD_DEFAULT);
@@ -34,19 +26,20 @@ class UserManager extends AbstractManager
         $statement->bindValue(':password', $hashedPassword, PDO::PARAM_STR);
         $statement->execute();
 
-        $userId = (int)$this->pdo->lastInsertId();
-
-        return $userId;
+        return (int)$this->pdo->lastInsertId();
     }
 
     public function getByEmail(string $email): array
     {
         $statement = $this->pdo->prepare('SELECT * FROM user WHERE email = :email');
         $statement->execute(['email' => $email]);
-        $ligne = $statement->fetch();
-        if (!$ligne) {
-            return [];
-        }
-        return $ligne;
+        return $statement->fetch() ?: [];
+    }
+
+    public function getById(int $id): array
+    {
+        $statement = $this->pdo->prepare('SELECT * FROM user WHERE id = :id');
+        $statement->execute(['id' => $id]);
+        return $statement->fetch() ?: [];
     }
 }

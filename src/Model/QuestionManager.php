@@ -11,20 +11,22 @@ class QuestionManager extends AbstractManager
     public function selectMostRecent()
     {
         $statement = $this->pdo->query("
-                SELECT q.*, 
-                    COUNT(DISTINCT p.user_id) as participant_count, 
-                    t.tag_list
-                FROM " . self::TABLE . " AS q
-                LEFT JOIN participant AS p ON q.id = p.question_id
-                LEFT JOIN (
-                    SELECT qt.question_id, GROUP_CONCAT(t.name SEPARATOR ', ') as tag_list
-                    FROM question_tag AS qt
-                    LEFT JOIN tag AS t ON qt.tag_id = t.id
-                    GROUP BY qt.question_id
-                ) AS t ON q.id = t.question_id
-                GROUP BY q.id
-                ORDER BY q.created_at DESC
-            ");
+            SELECT q.*, 
+                COUNT(DISTINCT p.user_id) as participant_count, 
+                COUNT(DISTINCT a.user_id) as alert_count, 
+                t.tag_list
+            FROM " . self::TABLE . " AS q
+            LEFT JOIN participant AS p ON q.id = p.question_id
+            LEFT JOIN alert AS a ON q.id = a.question_id
+            LEFT JOIN (
+                SELECT qt.question_id, GROUP_CONCAT(t.name SEPARATOR ', ') as tag_list
+                FROM question_tag AS qt
+                LEFT JOIN tag AS t ON qt.tag_id = t.id
+                GROUP BY qt.question_id
+            ) AS t ON q.id = t.question_id
+            GROUP BY q.id
+            ORDER BY q.created_at DESC
+        ");
 
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -57,36 +59,67 @@ class QuestionManager extends AbstractManager
 
     public function selectOneById(int $id): array|false
     {
-        $statement = $this->pdo->prepare("SELECT * FROM " . self::TABLE . " WHERE id=:id");
+        $statement = $this->pdo->prepare("
+            SELECT q.*, 
+                COUNT(DISTINCT p.user_id) as participant_count, 
+                COUNT(DISTINCT a.user_id) as alert_count, 
+                t.tag_list
+            FROM " . self::TABLE . " AS q
+            LEFT JOIN participant AS p ON q.id = p.question_id
+            LEFT JOIN alert AS a ON q.id = a.question_id
+            LEFT JOIN (
+                SELECT qt.question_id, GROUP_CONCAT(t.name SEPARATOR ', ') as tag_list
+                FROM question_tag AS qt
+                LEFT JOIN tag AS t ON qt.tag_id = t.id
+                GROUP BY qt.question_id
+            ) AS t ON q.id = t.question_id
+            WHERE q.id = :id
+            GROUP BY q.id
+        ");
         $statement->bindValue('id', $id, \PDO::PARAM_INT);
         $statement->execute();
 
         return $statement->fetch();
     }
+
     public function search(string $query): array
     {
-        $stmt = $this->pdo->prepare("SELECT q.*, 
-       COUNT(DISTINCT p.user_id) AS participant_count, 
-       GROUP_CONCAT(t.name SEPARATOR ', ') AS tag_list
-        FROM question AS q
-        LEFT JOIN participant AS p ON q.id = p.question_id
-        LEFT JOIN question_tag AS qt ON q.id = qt.question_id
-        LEFT JOIN tag AS t ON qt.tag_id = t.id
-        WHERE q.title LIKE :query OR q.description LIKE :query
-        GROUP BY q.id
-        ORDER BY q.created_at DESC;");
+        $stmt = $this->pdo->prepare("
+            SELECT q.*, 
+                COUNT(DISTINCT p.user_id) AS participant_count, 
+                COUNT(DISTINCT a.user_id) AS alert_count, 
+                GROUP_CONCAT(t.name SEPARATOR ', ') AS tag_list
+            FROM question AS q
+            LEFT JOIN participant AS p ON q.id = p.question_id
+            LEFT JOIN alert AS a ON q.id = a.question_id
+            LEFT JOIN question_tag AS qt ON q.id = qt.question_id
+            LEFT JOIN tag AS t ON qt.tag_id = t.id
+            WHERE q.title LIKE :query OR q.description LIKE :query
+            GROUP BY q.id
+            ORDER BY q.created_at DESC
+        ");
         $query = '%' . $query . '%';
         $stmt->bindValue(':query', $query, PDO::PARAM_STR);
 
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
     public function selectAllByTag(int $tagId): array
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM question q 
-        JOIN question_tag qt ON q.id = qt.question_id 
-        JOIN " . self::TABLE . " t ON qt.tag_id = t.id WHERE t.id = :tagId ");
-        $stmt->bindValue(':tagId', $tagId, PDO::PARAM_STR);
+        $stmt = $this->pdo->prepare("
+            SELECT q.*, 
+                COUNT(DISTINCT p.user_id) as participant_count, 
+                COUNT(DISTINCT a.user_id) as alert_count
+            FROM question AS q
+            LEFT JOIN participant AS p ON q.id = p.question_id
+            LEFT JOIN alert AS a ON q.id = a.question_id
+            JOIN question_tag AS qt ON q.id = qt.question_id
+            WHERE qt.tag_id = :tagId
+            GROUP BY q.id
+            ORDER BY q.created_at DESC
+        ");
+        $stmt->bindValue(':tagId', $tagId, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
